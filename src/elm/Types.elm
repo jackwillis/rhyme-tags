@@ -5,10 +5,7 @@ module Types
         , Document
         , getText
         , getTag
-        , mapNodeWithTag
-        , mapDocumentWithTag
         , rhymeKeys
-        , toString
         )
 
 import List.Extra exposing (unique)
@@ -72,16 +69,6 @@ getTag node =
             Just tag
 
 
-mapNodeWithTag : (Tag -> String -> String) -> Node -> Node
-mapNodeWithTag f node =
-    case node of
-        Text text ->
-            Text text
-
-        Rhyme { tag, text } ->
-            Rhyme { tag = tag, text = f tag text }
-
-
 
 -- This structure represents a whole poem,
 -- made up of Nodes which begin and end at rhyme boundaries.
@@ -96,17 +83,3 @@ rhymeKeys document =
     document.nodes
         |> List.filterMap getTag
         |> unique
-
-
-toString : Document -> String
-toString document =
-    document.nodes
-        |> List.map getText
-        |> String.join ""
-
-
-mapDocumentWithTag : (Tag -> String -> String) -> Document -> Document
-mapDocumentWithTag f document =
-    document.nodes
-        |> List.map (mapNodeWithTag f)
-        |> Document

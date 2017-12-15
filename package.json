@@ -18,7 +18,8 @@
     "start": "webpack-dev-server --hot --inline",
     "prebuild": "rimraf dist",
     "build": "webpack",
-    "reinstall": "npm i rimraf && rimraf node_modules && npm uninstall -g elm && npm i -g elm && npm i && elm package install"
+    "reinstall": "npm i rimraf && rimraf node_modules && npm uninstall -g elm && npm i -g elm && npm i && elm package install",
+    "format": "elm-format --yes src/elm/Helpers.elm src/elm/Main.elm src/elm/Markup.elm src/elm/Types.elm"
   },
   "author": "Jack Willis",
   "license": "GPL-3.0"

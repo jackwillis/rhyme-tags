@@ -4,6 +4,7 @@ import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
 import Markup exposing (ParseResult, parsePoem)
+import Helpers exposing (displayPoem)
 
 
 type alias Model =
@@ -14,7 +15,7 @@ type alias Model =
 
 initPoemText : String
 initPoemText =
-    "{ tekst : tagh }"
+    "so { tet : tah } os"
 
 
 init : ( Model, Cmd Msg )
@@ -25,11 +26,6 @@ init =
 type Msg
     = UpdateTitle String
     | UpdatePoem String
-
-
-displayPoem : ParseResult -> Html Msg
-displayPoem poem =
-    div [] [ text (Basics.toString poem) ]
 
 
 view : Model -> Html Msg
