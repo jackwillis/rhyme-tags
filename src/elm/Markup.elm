@@ -1,0 +1,72 @@
+module Markup exposing (ParseResult, parsePoem)
+
+import Combine exposing (ParseErr, ParseOk, Parser, many, string, parse, end, (<$>), (<|>), (<*), (*>), (<*>))
+import Combine.Char exposing (char, noneOf)
+import Types exposing (Tag, Node(..), Document)
+
+
+type alias ParseResult =
+    Result (ParseErr ()) (ParseOk () Document)
+
+
+stringNoneOf : List Char -> Parser s String
+stringNoneOf chars =
+    String.fromList <$> many (noneOf chars)
+
+
+rhymeContents : Parser s String
+rhymeContents =
+    stringNoneOf [ ':', '{', '}' ]
+
+
+textContents : Parser s String
+textContents =
+    stringNoneOf [ '{', '}' ]
+
+
+buildRhyme : String -> String -> Node
+buildRhyme text tag =
+    let
+        trimmedTag =
+            tag |> String.trim
+
+        trimmedText =
+            text |> String.trim
+
+        tagWithDefault =
+            if trimmedTag |> String.isEmpty then
+                trimmedText
+            else
+                trimmedTag
+    in
+        Rhyme
+            { tag = tagWithDefault |> String.toLower
+            , text = trimmedText
+            }
+
+
+rhyme : Parser s Node
+rhyme =
+    buildRhyme
+        <$> (string "{" *> rhymeContents)
+        <*> (string ":" *> rhymeContents <* string "}")
+
+
+buildText : String -> Node
+buildText text =
+    Text { text = text }
+
+
+text : Parser s Node
+text =
+    buildText <$> textContents
+
+
+document : Parser s Document
+document =
+    Document <$> many (rhyme <|> text) <* end
+
+
+parsePoem : String -> ParseResult
+parsePoem =
+    parse document

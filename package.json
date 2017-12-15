@@ -1,0 +1,25 @@
+{
+  "name": "rhyme-tags",
+  "version": "0.1.0",
+  "description": "",
+  "dependencies": {
+    "elm": "^0.18.0",
+    "elm-webpack-loader": "^4.4.0",
+    "html-webpack-plugin": "^2.30.1",
+    "uglifyjs-webpack-plugin": "^1.1.4",
+    "webpack": "^3.10.0",
+    "webpack-merge": "^4.1.1"
+  },
+  "devDependencies": {
+    "rimraf": "^2.6.2",
+    "webpack-dev-server": "^2.9.7"
+  },
+  "scripts": {
+    "start": "webpack-dev-server --hot --inline",
+    "prebuild": "rimraf dist",
+    "build": "webpack",
+    "reinstall": "npm i rimraf && rimraf node_modules && npm uninstall -g elm && npm i -g elm && npm i && elm package install"
+  },
+  "author": "Jack Willis",
+  "license": "GPL-3.0"
+}
