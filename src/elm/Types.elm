@@ -3,9 +3,12 @@ module Types
         ( Tag
         , Node(..)
         , Document
+        , Work
         , getText
         , getTag
         , rhymeKeys
+        , setTitle
+        , setText
         )
 
 import List.Extra exposing (unique)
@@ -83,3 +86,17 @@ rhymeKeys document =
     document.nodes
         |> List.filterMap getTag
         |> unique
+
+
+type alias Work =
+    { title : String, author : String, text : String }
+
+
+setTitle : String -> Work -> Work
+setTitle title work =
+    { work | title = title }
+
+
+setText : String -> Work -> Work
+setText text work =
+    { work | text = text }

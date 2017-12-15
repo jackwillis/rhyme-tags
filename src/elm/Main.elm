@@ -5,22 +5,17 @@ import Html.Attributes exposing (..)
 import Html.Events exposing (..)
 import Markup exposing (ParseResult, parsePoem)
 import Helpers exposing (displayPoem)
+import Types exposing (Work, Document, setTitle, setText)
+import Examples exposing (thingsYouCanDo)
 
 
 type alias Model =
-    { title : String
-    , poem : ParseResult
-    }
-
-
-initPoemText : String
-initPoemText =
-    "so { tet : tah } os"
+    { work : Work, document : ParseResult }
 
 
 init : ( Model, Cmd Msg )
 init =
-    ( Model "Things You Can Do" (parsePoem initPoemText), Cmd.none )
+    ( Model thingsYouCanDo (parsePoem thingsYouCanDo.text), Cmd.none )
 
 
 type Msg
@@ -34,13 +29,13 @@ view model =
         [ h1 [] [ text "Rhyme color-matching tool" ]
         , h2 [] [ text "Poem" ]
         , p [] [ text "Read documentation for rcmt" ]
-        , input [ type_ "text", value model.title, onInput UpdateTitle ] []
+        , input [ type_ "text", value model.work.title, onInput UpdateTitle ] []
         , br [] []
-        , textarea [ onInput UpdatePoem ] [ text initPoemText ]
+        , textarea [ onInput UpdatePoem ] [ text model.work.text ]
         , h2 [] [ text "Settings" ]
         , h2 [] [ text "Output" ]
-        , h3 [] [ text model.title ]
-        , displayPoem model.poem
+        , h3 [] [ text model.work.title ]
+        , displayPoem model.document
         ]
 
 
@@ -48,10 +43,10 @@ update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
         UpdateTitle title ->
-            ( { model | title = title }, Cmd.none )
+            ( { model | work = model.work |> setTitle title }, Cmd.none )
 
         UpdatePoem text ->
-            ( { model | poem = parsePoem text }, Cmd.none )
+            ( { model | work = model.work |> setText text, document = parsePoem text }, Cmd.none )
 
 
 subscriptions : Model -> Sub Msg
