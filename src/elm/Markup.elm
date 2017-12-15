@@ -64,7 +64,7 @@ text =
 
 document : Parser s Document
 document =
-    Document <$> many (rhyme <|> text) <* end
+    Document <$> many (rhyme <|> text)
 
 
 parsePoem : String -> ParseResult
