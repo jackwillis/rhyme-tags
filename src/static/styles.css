@@ -3,18 +3,23 @@ body {
     padding: 1em;
 }
 
-body, pre, textarea, input {
+body, textarea, input, .output pre {
     font: 12pt/18pt sans-serif;
 }
 
-textarea {
+textarea, .output {
     width: 30em;
     height: 20em;
+    overflow: scroll;
 }
 
-input, textarea {
+input, textarea, .output {
     padding: 1em;
     margin: 0.5em 0;
+}
+
+.output {
+    border: 1px solid black;
 }
 
 .columns {
@@ -26,6 +31,6 @@ input, textarea {
     max-width: 40em;
 }
 
-.entry {
+.columns > div:first-child {
     margin-right: 2em;
 }
