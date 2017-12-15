@@ -1,10 +1,5 @@
 module Examples exposing (thingsYouCanDo)
 
-import Types exposing (Work)
-
 
 thingsYouCanDo =
-    Work
-        "Things You Can Do"
-        "Deltron 3030"
-        "so { tet : tah } os"
+    "Things You Can Do\nby Deltron 3030\n\nso { tet : tah } os"
