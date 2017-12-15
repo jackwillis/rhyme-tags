@@ -1,6 +1,6 @@
 module Helpers exposing (displayPoem)
 
-import Html exposing (Html, div, text, strong)
+import Html exposing (Html, div, text, strong, pre)
 import Types exposing (Node(..), Document)
 import Markup exposing (ParseResult)
 
@@ -22,7 +22,7 @@ displayErrors errors =
 
 displayDocument : Document -> Html a
 displayDocument document =
-    div [] (List.map displayNode document.nodes)
+    pre [] (List.map displayNode document.nodes)
 
 
 displayNode : Node -> Html a

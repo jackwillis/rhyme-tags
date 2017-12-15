@@ -1,3 +1,31 @@
 body {
-    font-family: "Open Sans";
+    background: white;
+    padding: 1em;
+}
+
+body, pre, textarea, input {
+    font: 12pt/18pt sans-serif;
+}
+
+textarea {
+    width: 30em;
+    height: 20em;
+}
+
+input, textarea {
+    padding: 1em;
+    margin: 0.5em 0;
+}
+
+.columns {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.columns > div {
+    max-width: 40em;
+}
+
+.entry {
+    margin-right: 2em;
 }

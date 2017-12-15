@@ -25,17 +25,23 @@ type Msg
 
 view : Model -> Html Msg
 view model =
-    div []
+    div [ class "wrapper" ]
         [ h1 [] [ text "Rhyme color-matching tool" ]
-        , h2 [] [ text "Poem" ]
-        , p [] [ text "Read documentation for rcmt" ]
-        , input [ type_ "text", value model.work.title, onInput UpdateTitle ] []
-        , br [] []
-        , textarea [ onInput UpdateText ] [ text model.work.text ]
-        , h2 [] [ text "Settings" ]
-        , h2 [] [ text "Output" ]
-        , h3 [] [ text model.work.title ]
-        , displayPoem model.document
+        , div [ class "columns" ]
+            [ div [ class "entry" ]
+                [ h2 [] [ text "Poem" ]
+                , p [] [ text "Read documentation for rcmt" ]
+                , input [ type_ "text", value model.work.title, onInput UpdateTitle ] []
+                , br [] []
+                , textarea [ onInput UpdateText ] [ text model.work.text ]
+                ]
+            , div [ class "result" ]
+                [ h2 [] [ text "Settings" ]
+                , h2 [] [ text "Output" ]
+                , h3 [] [ text model.work.title ]
+                , displayPoem model.document
+                ]
+            ]
         ]
 
 
