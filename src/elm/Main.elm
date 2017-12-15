@@ -20,7 +20,7 @@ init =
 
 type Msg
     = UpdateTitle String
-    | UpdatePoem String
+    | UpdateText String
 
 
 view : Model -> Html Msg
@@ -31,7 +31,7 @@ view model =
         , p [] [ text "Read documentation for rcmt" ]
         , input [ type_ "text", value model.work.title, onInput UpdateTitle ] []
         , br [] []
-        , textarea [ onInput UpdatePoem ] [ text model.work.text ]
+        , textarea [ onInput UpdateText ] [ text model.work.text ]
         , h2 [] [ text "Settings" ]
         , h2 [] [ text "Output" ]
         , h3 [] [ text model.work.title ]
@@ -45,7 +45,7 @@ update msg model =
         UpdateTitle title ->
             ( { model | work = model.work |> setTitle title }, Cmd.none )
 
-        UpdatePoem text ->
+        UpdateText text ->
             ( { model | work = model.work |> setText text, document = parsePoem text }, Cmd.none )
 
 
