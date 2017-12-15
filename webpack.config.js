@@ -19,6 +19,12 @@ const defaultConfig = {
         extensions: [".js", ".elm"],
         modules: ["node_modules"]
     },
+    module: {
+      rules: [{
+          test: /\.css$/,
+          use: ["style-loader", "css-loader"]
+      }]
+    },
     plugins: [
         new HtmlWebpackPlugin({
             template: "src/static/index.html",
