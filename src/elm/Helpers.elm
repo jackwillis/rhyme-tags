@@ -1,4 +1,4 @@
-module Helpers exposing (displayPoem)
+module Helpers exposing (displayResult)
 
 import Dict exposing (Dict)
 import Html exposing (Html, div, text, strong, pre)
@@ -8,8 +8,8 @@ import Palette exposing (Color, nthColor)
 import Markup exposing (ParseResult)
 
 
-displayPoem : ParseResult -> Html a
-displayPoem poem =
+displayResult : ParseResult -> Html a
+displayResult poem =
     case poem of
         Err ( _, _, errors ) ->
             displayErrors errors

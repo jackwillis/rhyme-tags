@@ -1,6 +1,6 @@
-module Markup exposing (ParseResult, parsePoem)
+module Markup exposing (ParseResult, parse)
 
-import Combine exposing (ParseErr, ParseOk, Parser, many, string, parse, end, (<$>), (<|>), (<*), (*>), (<*>))
+import Combine exposing (ParseErr, ParseOk, Parser, many, string, end, (<$>), (<|>), (<*), (*>), (<*>))
 import Combine.Char exposing (char, noneOf)
 import Types exposing (Tag, Node(..), Document)
 
@@ -67,6 +67,6 @@ document =
     Document <$> many (rhyme <|> text)
 
 
-parsePoem : String -> ParseResult
-parsePoem =
-    parse document
+parse : String -> ParseResult
+parse =
+    Combine.parse document

@@ -3,18 +3,18 @@ module Main exposing (main)
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
-import Markup exposing (ParseResult, parsePoem)
-import Helpers exposing (displayPoem)
+import Markup exposing (ParseResult, parse)
+import Helpers exposing (displayResult)
 import Examples exposing (thingsYouCanDo)
 
 
 type alias Model =
-    { text : String, document : ParseResult }
+    { text : String, result : ParseResult }
 
 
 init : ( Model, Cmd Msg )
 init =
-    ( Model thingsYouCanDo (parsePoem thingsYouCanDo), Cmd.none )
+    ( Model thingsYouCanDo (parse thingsYouCanDo), Cmd.none )
 
 
 type Msg
@@ -35,7 +35,7 @@ view model =
                 [ h2 [] [ text "Settings" ]
                 , h2 [] [ text "Output" ]
                 , p [] [ text "(Permalink)" ]
-                , div [ class "output" ] [ displayPoem model.document ]
+                , div [ class "output" ] [ displayResult model.result ]
                 ]
             ]
         ]
@@ -45,7 +45,7 @@ update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
         UpdateText text ->
-            ( { model | text = text, document = parsePoem text }, Cmd.none )
+            ( { model | text = text, result = parse text }, Cmd.none )
 
 
 subscriptions : Model -> Sub Msg
