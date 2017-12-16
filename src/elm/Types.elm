@@ -5,7 +5,7 @@ module Types
         , Document
         , getText
         , getTag
-        , rhymeKeys
+        , rhymeTags
         )
 
 import List.Extra exposing (unique)
@@ -78,8 +78,8 @@ type alias Document =
     { nodes : List Node }
 
 
-rhymeKeys : Document -> List Tag
-rhymeKeys document =
+rhymeTags : Document -> List Tag
+rhymeTags document =
     document.nodes
         |> List.filterMap getTag
         |> unique
