@@ -1,7 +1,6 @@
 module Palette exposing (Color, nthColor)
 
-import Array exposing (Array, fromList, get, length)
-import Maybe exposing (withDefault)
+import Array exposing (Array)
 
 
 type alias Color =
@@ -22,6 +21,6 @@ nthColor : Int -> Color
 nthColor n =
     let
         index =
-            n % length allPalettes
+            n % Array.length allPalettes
     in
-        get index allPalettes |> withDefault ""
+        Array.get index allPalettes |> Maybe.withDefault ""

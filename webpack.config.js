@@ -72,7 +72,7 @@ const prodConfig = {
     ]
 };
 
-const isProd = process.env.npm_lifecycle_event === "build";
+const isProd = process.env.NODE_ENV === "production" || process.env.npm_lifecycle_event === "build";
 const extraConfig = isProd ? prodConfig : devConfig;
 
 module.exports = merge(defaultConfig, extraConfig);
