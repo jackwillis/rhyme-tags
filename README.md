@@ -4,8 +4,11 @@
 
 ## Installation
 
-rhyme-tags will build on Linux without modification,
-and will build on Windows with [WSL](https://docs.microsoft.com/en-us/windows/wsl/about).
+rhyme-tags is intended to be built on Linux.
+If you are using Windows 10, you should install the
+_Windows Subsystem for Linux_
+([WSL](https://docs.microsoft.com/en-us/windows/wsl/about))
+for compatibility.
 
 Make sure [Node.js](https://nodejs.org)
 and [npm](https://www.npmjs.com)
