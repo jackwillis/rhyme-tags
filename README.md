@@ -5,7 +5,7 @@
 ## Installation
 
 rhyme-tags is intended to be built on Linux.
-If you are using Windows 10, you should install the
+If you are using Windows 10, you should use
 _Windows Subsystem for Linux_
 ([WSL](https://docs.microsoft.com/en-us/windows/wsl/about))
 for compatibility.
@@ -13,8 +13,12 @@ for compatibility.
 Make sure [Node.js](https://nodejs.org)
 and [npm](https://www.npmjs.com)
 are installed on your system.
-Then, navigate to the project folder and
-install the project's Javascript dependencies:
+If you have just installed WSL, double-check by running:
+
+    $ type node
+
+First, navigate to the project's directory and
+install its Javascript dependencies:
 
     $ cd rhyme-tags/
     $ npm install
