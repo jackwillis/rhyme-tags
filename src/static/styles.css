@@ -4,19 +4,27 @@ body {
 }
 
 body, textarea, input, .output pre {
-    font: 12pt/18pt sans-serif;
+    font: 10pt/16pt "PT Serif", "Droid Serif", "Book Antiqua", serif;
 }
 
 textarea, .output {
-    width: 30em;
-    height: 30em;
+    width: 35em;
+    height: 35em;
     overflow: auto;
     padding: 1em;
     margin: 0;
 }
 
+.extras {
+    width: 25em;
+}
+
 pre {
     margin: 0;
+}
+
+.document span {
+    font-weight: bold;
 }
 
 .output {
@@ -26,8 +34,9 @@ pre {
 .columns {
     display: flex;
     flex-wrap: wrap;
+    justify-content: space-around;
 }
 
 .columns > div {
-    margin-right: 2em;
+    margin: 0 0.5em;
 }

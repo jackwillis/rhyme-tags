@@ -1,11 +1,11 @@
-module Helpers exposing (displayResult)
+module DocumentView exposing (displayResult)
 
 import Dict exposing (Dict)
-import Html exposing (Html, div, text, strong, pre)
+import Html exposing (Html, div, text, span, pre)
 import Html.Attributes exposing (class, style)
-import Types exposing (Node(..), Document, Tag, rhymeTags)
-import Palette exposing (Color, nthColor)
-import Markup exposing (ParseResult)
+import Document exposing (Node(..), Document, Tag, tags)
+import Data.Palette exposing (Color, nthColor)
+import DocumentParser exposing (ParseResult)
 
 
 displayResult : ParseResult -> Html a
@@ -29,7 +29,7 @@ displayDocument document =
         tagPalette : Dict Tag Color
         tagPalette =
             document
-                |> rhymeTags
+                |> tags
                 |> List.indexedMap (\i tag -> ( tag, nthColor i ))
                 |> Dict.fromList
 
@@ -44,6 +44,6 @@ displayDocument document =
                     Html.text text
 
                 Rhyme { tag, text } ->
-                    strong [ style [ ( "color", getColor tag ) ] ] [ Html.text text ]
+                    span [ style [ ( "color", getColor tag ) ] ] [ Html.text text ]
     in
         pre [ class "document" ] (List.map displayNode document.nodes)

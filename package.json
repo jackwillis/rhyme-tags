@@ -1,6 +1,6 @@
 {
   "name": "rhyme-tags",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "web-based rhyme visualization tool",
   "repository": "https://github.com/jackwillis/rhyme-tags",
   "dependencies": {
@@ -22,7 +22,7 @@
     "prebuild": "rm -f dist/*",
     "build": "webpack -p",
     "postbuild": "rm -f dist/bundle.*",
-    "reinstall": "rm -rf node_modules/ elm-stuff/ && npm install && elm-package install",
+    "reinstall": "rm -rf node_modules/ elm-stuff/ && npm install && elm-package --yes install",
     "format": "elm-format --yes src/elm/*.elm"
   },
   "author": "Jack Willis",

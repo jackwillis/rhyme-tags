@@ -1,8 +1,8 @@
-module Markup exposing (ParseResult, parse)
+module DocumentParser exposing (ParseResult, parse)
 
 import Combine exposing (ParseErr, ParseOk, Parser, many, string, end, (<$>), (<|>), (<*), (*>), (<*>))
 import Combine.Char exposing (char, noneOf)
-import Types exposing (Tag, Node(..), Document)
+import Document exposing (Tag, Node(..), Document)
 
 
 type alias ParseResult =

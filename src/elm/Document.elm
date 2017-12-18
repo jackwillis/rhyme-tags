@@ -1,11 +1,11 @@
-module Types
+module Document
     exposing
         ( Tag
         , Node(..)
         , Document
         , getText
         , getTag
-        , rhymeTags
+        , tags
         )
 
 import List.Extra exposing (unique)
@@ -49,8 +49,8 @@ type alias Document =
     { nodes : List Node }
 
 
-rhymeTags : Document -> List Tag
-rhymeTags document =
+tags : Document -> List Tag
+tags document =
     document.nodes
         |> List.filterMap getTag
         |> unique
