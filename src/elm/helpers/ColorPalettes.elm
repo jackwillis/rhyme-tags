@@ -1,4 +1,4 @@
-module Palette exposing (Color, nthColor)
+module Helpers.ColorPalettes exposing (Color, nthColor)
 
 import Array exposing (Array)
 

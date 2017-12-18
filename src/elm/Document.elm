@@ -1,4 +1,4 @@
-module Types
+module Document
     exposing
         ( Tag
         , Node(..)

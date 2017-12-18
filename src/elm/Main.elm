@@ -4,8 +4,8 @@ import Array exposing (Array)
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
-import Markup exposing (ParseResult, parse)
-import Helpers exposing (displayResult)
+import Parser exposing (ParseResult, parse)
+import Helpers.DisplayResult exposing (displayResult)
 import Examples exposing (Example, thingsYouCanDo, allExamples)
 
 
