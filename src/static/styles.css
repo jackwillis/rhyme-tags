@@ -29,9 +29,5 @@ pre {
 }
 
 .columns > div {
-    max-width: 40em;
-}
-
-.columns > div:first-child {
     margin-right: 2em;
 }
