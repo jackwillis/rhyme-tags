@@ -116,19 +116,6 @@ Delicious, fine Sugar { Hill: spill }.
 """
 
 
-smallPoem : Example
-smallPoem =
-    Example
-        "Title"
-    <| String.trim """
-
-Title
-by Artist
-
-(poem contents)
-
-    """
-
 realityPoem : Example
 realityPoem =
     Example

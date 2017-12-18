@@ -8,11 +8,15 @@ body, textarea, input, .output pre {
 }
 
 textarea, .output {
-    width: 40em;
-    height: 40em;
+    width: 35em;
+    height: 35em;
     overflow: auto;
     padding: 1em;
     margin: 0;
+}
+
+.extras {
+    width: 25em;
 }
 
 pre {
@@ -30,8 +34,9 @@ pre {
 .columns {
     display: flex;
     flex-wrap: wrap;
+    justify-content: space-around;
 }
 
 .columns > div {
-    margin-right: 2em;
+    margin: 0 0.5em;
 }

@@ -55,14 +55,13 @@ view model =
                 [ h2 [] [ text "Output" ]
                 , div [ class "output" ] [ displayResult model.result ]
                 ]
-            , div []
-                [ h2 [] [ text "Documentation" ]
+            , div [ class "extras" ]
+                [ h2 [] [ text "About" ]
                 , p []
-                    [ text "Read "
-                    , a [ href "https://github.com/jackwillis/rhyme-tags" ] [ text "usage information" ]
-                    , text " for rhyme-tags."
+                    [ a [ href "https://github.com/jackwillis/rhyme-tags" ] [ text "rhyme-tags" ]
+                    , text " is open source software released under the terms of the GNU General Public License, version 3."
                     ]
-                , h2 [] [ text "Examples" ]
+                , h2 [] [ text "Load examples" ]
                 , select [ onInput LoadExample ] exampleOptions
                 ]
             ]
