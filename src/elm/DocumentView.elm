@@ -1,11 +1,11 @@
-module Helpers.DisplayResult exposing (displayResult)
+module DocumentView exposing (displayResult)
 
 import Dict exposing (Dict)
 import Html exposing (Html, div, text, strong, pre)
 import Html.Attributes exposing (class, style)
 import Document exposing (Node(..), Document, Tag, tags)
-import Helpers.ColorPalettes exposing (Color, nthColor)
-import Parser exposing (ParseResult)
+import Data.Palette exposing (Color, nthColor)
+import DocumentParser exposing (ParseResult)
 
 
 displayResult : ParseResult -> Html a

@@ -1,4 +1,4 @@
-module Examples exposing (Example, thingsYouCanDo, fatCatsBiggaFish, harlemSweeties, allExamples)
+module Data.Examples exposing (Example, thingsYouCanDo, fatCatsBiggaFish, harlemSweeties, allExamples)
 
 import Array exposing (Array)
 

@@ -4,9 +4,9 @@ import Array exposing (Array)
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
-import Parser exposing (ParseResult, parse)
-import Helpers.DisplayResult exposing (displayResult)
-import Examples exposing (Example, thingsYouCanDo, allExamples)
+import DocumentParser exposing (ParseResult, parse)
+import DocumentView exposing (displayResult)
+import Data.Examples exposing (Example, thingsYouCanDo, allExamples)
 
 
 type alias Model =
@@ -29,7 +29,7 @@ exampleOptions =
         optionFor n example =
             option [ value (toString n) ] [ text example.title ]
     in
-        Examples.allExamples
+        allExamples
             |> Array.indexedMap optionFor
             |> Array.toList
 
