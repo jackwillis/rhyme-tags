@@ -3,7 +3,7 @@ module Helpers.DisplayResult exposing (displayResult)
 import Dict exposing (Dict)
 import Html exposing (Html, div, text, strong, pre)
 import Html.Attributes exposing (class, style)
-import Document exposing (Node(..), Document, Tag, rhymeTags)
+import Document exposing (Node(..), Document, Tag, tags)
 import Helpers.ColorPalettes exposing (Color, nthColor)
 import Parser exposing (ParseResult)
 
@@ -29,7 +29,7 @@ displayDocument document =
         tagPalette : Dict Tag Color
         tagPalette =
             document
-                |> rhymeTags
+                |> tags
                 |> List.indexedMap (\i tag -> ( tag, nthColor i ))
                 |> Dict.fromList
 
