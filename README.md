@@ -23,8 +23,8 @@ marked up for rhyme-tags:
 Rhyming sections of a poem are enclosed by brackets in a
 `{ text: tag }` format.
 
-Rhymes with blank tags like `{ mobile: }`
-expand like `{ mobile: mobile }`.
+Rhymes with blank tags, like (as shown above) `{ mobile: }`,
+expand, and are treated like `{ mobile: mobile }`.
 
 Each 'tag' should be unique to a rhyme group.
 It is not necessary, but it can be helpful to choose a tag
