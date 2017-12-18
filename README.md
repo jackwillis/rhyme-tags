@@ -1,16 +1,15 @@
 # rhyme-tags
 
-rhyme-tags is a web-based rhyme visualization tool.
-
 [![GitHub tag](https://img.shields.io/github/tag/jackwillis/rhyme-tags.svg?style=flat-square)]()
+
+rhyme-tags is a web-based rhyme visualization tool.
 
 ## Usage
 
-rhyme-tags uses a small tag-based markup language
-to represent poems with rhyme data.
+rhyme-tags uses a custom poem markup language.
 
-Here is an excerpt of "Fat Cats / Bigga Fish" by The Coup
-marked up using this language:
+Here is an excerpt of "Fat Cats, Bigga Fish" by The Coup,
+marked up for rhyme-tags:
 
     It's almost 10 o'clock, see, I got a ball of lint for { property: }
     So I slip my beanie on { sloppily: property }
@@ -20,11 +19,22 @@ marked up using this language:
     As I feel the cold wind { rush past: }
     But let me state that I'm a hustler { for real: mobile }
     So you know I got the stolen { bus pass: rush past }
+    
+Rhyming sections of a poem are enclosed by brackets in a
+`{ text: tag }` format.
+
+Rhymes with blank tags like `{ rush past: }`
+expand to `{ rush past: rush past }`.
+
+Each 'tag' should be unique to a rhyme group.
+It is not necessary, but it can be helpful to choose a tag
+as simply the first rhyme in that group to appear,
+as is done above.
 
 ## Installation
 
 rhyme-tags is intended to be built on Linux.
-If you are using Windows 10, you should use
+If you are using Windows 10, you should use the
 _Windows Subsystem for Linux_
 ([WSL](https://docs.microsoft.com/en-us/windows/wsl/about))
 for compatibility.
