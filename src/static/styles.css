@@ -9,9 +9,13 @@ body, textarea, input, .output pre {
 
 textarea, .output {
     width: 30em;
-    height: 20em;
-    overflow: scroll;
+    height: 30em;
+    overflow: auto;
     padding: 1em;
+    margin: 0;
+}
+
+pre {
     margin: 0;
 }
 
