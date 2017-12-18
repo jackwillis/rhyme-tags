@@ -4,12 +4,12 @@ body {
 }
 
 body, textarea, input, .output pre {
-    font: 12pt/18pt sans-serif;
+    font: 10pt/16pt "PT Serif", "Droid Serif", "Book Antiqua", serif;
 }
 
 textarea, .output {
-    width: 30em;
-    height: 30em;
+    width: 40em;
+    height: 40em;
     overflow: auto;
     padding: 1em;
     margin: 0;
@@ -17,6 +17,10 @@ textarea, .output {
 
 pre {
     margin: 0;
+}
+
+.document span {
+    font-weight: bold;
 }
 
 .output {

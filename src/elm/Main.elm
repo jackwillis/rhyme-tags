@@ -6,7 +6,7 @@ import Html.Attributes exposing (..)
 import Html.Events exposing (..)
 import DocumentParser exposing (ParseResult, parse)
 import DocumentView exposing (displayResult)
-import Data.Examples exposing (Example, thingsYouCanDo, allExamples)
+import Data.Examples exposing (Example, aLongWalk, allExamples)
 
 
 type alias Model =
@@ -15,7 +15,7 @@ type alias Model =
 
 init : ( Model, Cmd Msg )
 init =
-    ( Model thingsYouCanDo.body (parse thingsYouCanDo.body), Cmd.none )
+    ( Model aLongWalk.body (parse aLongWalk.body), Cmd.none )
 
 
 type Msg
