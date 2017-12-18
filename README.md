@@ -1,6 +1,25 @@
 # rhyme-tags
 
+rhyme-tags is a web-based rhyme visualization tool.
+
 [![GitHub tag](https://img.shields.io/github/tag/jackwillis/rhyme-tags.svg?style=flat-square)]()
+
+## Usage
+
+rhyme-tags uses a small tag-based markup language
+to represent poems with rhyme data.
+
+Here is an excerpt of "Fat Cats / Bigga Fish" by The Coup
+marked up using this language:
+
+    It's almost 10 o'clock, see, I got a ball of lint for { property: }
+    So I slip my beanie on { sloppily: property }
+    And promenade out to take up a { collection: }
+    I got game like I read the { directions: collection }
+    I'm wishing that I had an auto{ mobile: }
+    As I feel the cold wind { rush past: }
+    But let me state that I'm a hustler { for real: mobile }
+    So you know I got the stolen { bus pass: rush past }
 
 ## Installation
 
@@ -13,9 +32,6 @@ for compatibility.
 Make sure [Node.js](https://nodejs.org)
 and [npm](https://www.npmjs.com)
 are installed on your system.
-If you have just installed WSL, double-check by running:
-
-    $ type node
 
 First, navigate to the project's directory and
 install its Javascript dependencies:

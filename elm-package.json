@@ -1,6 +1,6 @@
 {
     "version": "0.1.0",
-    "summary": "",
+    "summary": "web-based rhyme visualization tool",
     "repository": "https://github.com/jackwillis/rhyme-tags.git",
     "license": "GPL-3.0",
     "source-directories": [

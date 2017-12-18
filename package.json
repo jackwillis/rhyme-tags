@@ -1,7 +1,7 @@
 {
   "name": "rhyme-tags",
   "version": "0.1.0",
-  "description": "",
+  "description": "web-based rhyme visualization tool",
   "repository": "https://github.com/jackwillis/rhyme-tags",
   "dependencies": {
     "elm": "^0.18.0",
