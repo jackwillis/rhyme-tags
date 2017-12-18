@@ -1,4 +1,5 @@
-require("style-loader!./styles.css");
+require("../static/styles.css");
 
-var Elm = require("../elm/Main");
+const Elm = require("../elm/Main");
+
 Elm.Main.embed(document.getElementById("main"));

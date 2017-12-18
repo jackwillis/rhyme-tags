@@ -2,26 +2,28 @@
   "name": "rhyme-tags",
   "version": "0.1.0",
   "description": "",
+  "repository": "https://github.com/jackwillis/rhyme-tags",
   "dependencies": {
     "elm": "^0.18.0",
     "elm-webpack-loader": "^4.4.0",
     "html-webpack-plugin": "^2.30.1",
-    "uglifyjs-webpack-plugin": "^1.1.4",
     "webpack": "^3.10.0",
-    "webpack-merge": "^4.1.1"
+    "webpack-merge": "^4.1.1",
+    "style-loader": "^0.19.1",
+    "css-loader": "^0.28.7",
+    "extract-text-webpack-plugin": "^3.0.2",
+    "html-webpack-inline-source-plugin": "0.0.9"
   },
   "devDependencies": {
-    "css-loader": "^0.28.7",
-    "rimraf": "^2.6.2",
-    "style-loader": "^0.19.1",
     "webpack-dev-server": "^2.9.7"
   },
   "scripts": {
     "start": "webpack-dev-server --hot --inline",
-    "prebuild": "rimraf dist",
-    "build": "webpack",
-    "reinstall": "npm i rimraf && rimraf node_modules && npm uninstall -g elm && npm i -g elm && npm i && elm package install",
-    "format": "elm-format --yes src/elm/Helpers.elm src/elm/Main.elm src/elm/Markup.elm src/elm/Types.elm src/elm/Examples.elm src/elm/Palette.elm"
+    "prebuild": "rm -f dist/*",
+    "build": "webpack -p",
+    "postbuild": "rm -f dist/bundle.*",
+    "reinstall": "rm -rf node_modules/ elm-stuff/ && npm install && elm-package install",
+    "format": "elm-format --yes src/elm/*.elm"
   },
   "author": "Jack Willis",
   "license": "GPL-3.0"

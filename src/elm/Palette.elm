@@ -9,7 +9,7 @@ type alias Color =
 
 tolQualitative : Array Color
 tolQualitative =
-    Array.fromList [ "#332288", "#6699cc", "#88ccee", "#44aa99", "#117733", "#999933", "#ddcc77", "#661100", "#cc6677", "#aa4466", "#882255", "#aa4499" ]
+    Array.fromList [ "#332388", "#6699cc", "#88ccee", "#44aa99", "#117733", "#999933", "#ddcc77", "#661100", "#cc6677", "#aa4466", "#882255", "#aa4499" ]
 
 
 allPalettes : Array Color

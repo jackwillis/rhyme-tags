@@ -38,9 +38,13 @@ buildRhyme text tag =
                 trimmedText
             else
                 trimmedTag
+
+        -- store rhyme tags as case-insensitive, for convenience
+        lowerCaseTag =
+            tagWithDefault |> String.toLower
     in
         Rhyme
-            { tag = tagWithDefault |> String.toLower
+            { tag = lowerCaseTag
             , text = trimmedText
             }
 
