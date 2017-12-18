@@ -4,6 +4,8 @@
 
 rhyme-tags is a web-based rhyme visualization tool.
 
+See the online demo: https://www.attac.us/rhyme-tags.
+
 ## Usage
 
 rhyme-tags uses a custom poem markup language.
@@ -31,7 +33,11 @@ It is not necessary, but it can be helpful to choose a tag
 as simply the first rhyme in that group to appear,
 as is done above.
 
-## Installation
+## Compiling from source
+
+rhyme-tags is distributed under the terms of the
+GNU General Public License, version 3.0.
+See [COPYING.md](COPYING.md).
 
 rhyme-tags is intended to be built on Linux.
 If you are using Windows 10, you may want to use the
