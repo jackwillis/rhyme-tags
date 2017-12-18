@@ -34,12 +34,11 @@ as is done above.
 ## Installation
 
 rhyme-tags is intended to be built on Linux.
-If you are using Windows 10, you should use the
-_Windows Subsystem for Linux_
+If you are using Windows 10, you may want to use the
+Windows Subsystem for Linux
 ([WSL](https://docs.microsoft.com/en-us/windows/wsl/about))
 for compatibility.
-
-Make sure [Node.js](https://nodejs.org)
+Also ensure [Node.js](https://nodejs.org)
 and [npm](https://www.npmjs.com)
 are installed on your system.
 
