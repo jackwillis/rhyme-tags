@@ -1,13 +1,13 @@
 module Main exposing (main)
 
 import Array exposing (Array)
-import Json.Decode
+import Data.Examples exposing (Example, aLongWalk, allExamples)
+import DocumentParser exposing (ParseResult, parse)
+import DocumentView exposing (displayResult)
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
-import DocumentParser exposing (ParseResult, parse)
-import DocumentView exposing (displayResult)
-import Data.Examples exposing (Example, aLongWalk, allExamples)
+import Json.Decode
 
 
 type alias Model =
@@ -22,8 +22,6 @@ init =
 type Msg
     = UpdateText String
     | LoadExample String
-    | ScrollInput
-    | ScrollOutput
 
 
 exampleOptions : List (Html a)
@@ -45,44 +43,40 @@ getExample index =
         |> Maybe.andThen (\i -> Array.get i allExamples)
 
 
-onScroll : msg -> Attribute msg
-onScroll msg =
-    on "scroll" (Json.Decode.succeed msg)
-
-
 view : Model -> Html Msg
 view model =
     div [ class "wrapper" ]
-        [ h1 [] [ text "rhyme-tags" ]
+        [ h1 []
+            [ text "rhyme-tags" ]
         , div [ id "columns" ]
             [ div [ id "output-column" ]
-                [ h2 [] [ text "Output" ]
-                , div
-                    [ id "output"
-                    , onScroll ScrollOutput
-                    ]
-                    (displayResult model.result)
+                [ h2 []
+                    [ text "Output" ]
+                , div [ id "output" ]
+                    model.result
+                    |> displayResult
                 ]
             , div [ id "input-column" ]
-                [ h2 [] [ text "Input" ]
+                [ h2 []
+                    [ text "Input" ]
                 , textarea
                     [ id "input"
                     , value model.text
                     , onInput UpdateText
-                    , onScroll ScrollInput
                     ]
                     []
                 ]
             , div [ id "extras" ]
-                [ h2 [] [ text "About" ]
+                [ h2 []
+                    [ text "About" ]
                 , p []
                     [ a [ href "https://github.com/jackwillis/rhyme-tags" ] [ text "rhyme-tags" ]
                     , text " is free software released under the terms of the GNU General Public License, version 3."
                     ]
-                , h2 [] [ text "Load examples" ]
+                , h2 []
+                    [ text "Load examples" ]
                 , select
-                    [ onInput LoadExample
-                    ]
+                    [ onInput LoadExample ]
                     exampleOptions
                 ]
             ]
@@ -107,12 +101,6 @@ update msg model =
 
                 Nothing ->
                     ( { model | text = "No such example #" ++ num, result = parse "" }, Cmd.none )
-
-        ScrollInput ->
-            ( model, Cmd.none )
-
-        ScrollOutput ->
-            ( model, Cmd.none )
 
 
 subscriptions : Model -> Sub Msg
