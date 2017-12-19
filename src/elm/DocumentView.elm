@@ -4,7 +4,7 @@ import Dict exposing (Dict)
 import Html exposing (Html, div, text, span, pre)
 import Html.Attributes exposing (class, style)
 import Document exposing (Node(..), Document, Tag, tags)
-import Data.Palette exposing (Color, nthColor)
+import Data.Palette exposing (ColorString, nthColor)
 import DocumentParser exposing (ParseResult)
 
 
@@ -26,14 +26,14 @@ displayErrors errors =
 displayDocument : Document -> Html a
 displayDocument document =
     let
-        tagPalette : Dict Tag Color
+        tagPalette : Dict Tag ColorString
         tagPalette =
             document
                 |> tags
                 |> List.indexedMap (\i tag -> ( tag, nthColor i ))
                 |> Dict.fromList
 
-        getColor : Tag -> Color
+        getColor : Tag -> ColorString
         getColor tag =
             tagPalette |> Dict.get tag |> Maybe.withDefault ""
 

@@ -23,7 +23,7 @@
     "build": "webpack -p",
     "postbuild": "rm -f dist/bundle.*",
     "reinstall": "rm -rf node_modules/ elm-stuff/ && npm install && elm-package --yes install",
-    "format": "elm-format --yes src/elm/*.elm"
+    "format": "elm-format --yes src/elm/*.elm src/elm/**/*.elm"
   },
   "author": "Jack Willis",
   "license": "GPL-3.0"
