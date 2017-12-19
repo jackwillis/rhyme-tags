@@ -59,7 +59,7 @@ view model =
                 [ h2 [] [ text "About" ]
                 , p []
                     [ a [ href "https://github.com/jackwillis/rhyme-tags" ] [ text "rhyme-tags" ]
-                    , text " is open source software released under the terms of the GNU General Public License, version 3."
+                    , text " is free software released under the terms of the GNU General Public License, version 3."
                     ]
                 , h2 [] [ text "Load examples" ]
                 , select [ onInput LoadExample ] exampleOptions
