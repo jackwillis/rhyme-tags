@@ -54,26 +54,26 @@ view : Model -> Html Msg
 view model =
     div [ class "wrapper" ]
         [ h1 [] [ text "rhyme-tags" ]
-        , div [ class "columns" ]
-            [ div [ class "output-column" ]
+        , div [ id "columns" ]
+            [ div [ id "output-column" ]
                 [ h2 [] [ text "Output" ]
                 , div
-                    [ class "output"
+                    [ id "output"
                     , onScroll ScrollOutput
                     ]
                     (displayResult model.result)
                 ]
-            , div [ class "input-column" ]
+            , div [ id "input-column" ]
                 [ h2 [] [ text "Input" ]
                 , textarea
-                    [ class "input"
+                    [ id "input"
                     , value model.text
                     , onInput UpdateText
                     , onScroll ScrollInput
                     ]
                     []
                 ]
-            , div [ class "extras" ]
+            , div [ id "extras" ]
                 [ h2 [] [ text "About" ]
                 , p []
                     [ a [ href "https://github.com/jackwillis/rhyme-tags" ] [ text "rhyme-tags" ]
