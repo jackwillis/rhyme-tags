@@ -91,7 +91,7 @@ In Harlem’s no { lack: black }.
 Glow of the quince
 To blush of the { rose: rose }.
 Persimmon bronze
-To cinnamon { toes: toes }.
+To cinnamon { toes: rose }.
 Blackberry cordial,
 Virginia Dare { wine: }—
 All those sweet colors
