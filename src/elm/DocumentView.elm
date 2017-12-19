@@ -1,5 +1,6 @@
-module DocumentView exposing (displayResult)
+module DocumentView exposing (displayResult, nthLetter)
 
+import Char
 import Dict exposing (Dict)
 import Html exposing (Html, div, text, span, pre)
 import Html.Attributes exposing (class, style)
@@ -23,6 +24,15 @@ displayErrors errors =
     div [] [ text ("Errors: " ++ Basics.toString errors) ]
 
 
+nthLetter : Int -> Maybe Char
+nthLetter n =
+    -- Note: 0x249C = '⒜', part of Enclosed Alphanumerics block in Unicode
+    if 0 <= n && n < 26 then
+        Just <| Char.fromCode <| 0x249C + n
+    else
+        Nothing
+
+
 displayDocument : Document -> Html a
 displayDocument document =
     let
@@ -37,6 +47,10 @@ displayDocument document =
         getColor tag =
             tagPalette |> Dict.get tag |> Maybe.withDefault ""
 
+        getMark : Tag -> String
+        getMark tag =
+            nthLetter 3 |> Maybe.map String.fromChar |> Maybe.withDefault ""
+
         displayNode : Node -> Html a
         displayNode node =
             case node of
@@ -44,6 +58,9 @@ displayDocument document =
                     Html.text text
 
                 Rhyme { tag, text } ->
-                    span [ style [ ( "color", getColor tag ) ] ] [ Html.text text ]
+                    span [ style [ ( "color", getColor tag ) ] ]
+                        [ Html.text text
+                        , Html.text (getMark tag)
+                        ]
     in
         pre [ class "document" ] (List.map displayNode document.nodes)
