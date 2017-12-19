@@ -57,11 +57,21 @@ view model =
         , div [ class "columns" ]
             [ div []
                 [ h2 [] [ text "Output" ]
-                , div [ class "output", onScroll ScrollOutput ] (displayResult model.result)
+                , div
+                    [ class "output"
+                    , onScroll ScrollOutput
+                    ]
+                    (displayResult model.result)
                 ]
             , div []
                 [ h2 [] [ text "Input" ]
-                , textarea [ class "input", value model.text, onInput UpdateText, onScroll ScrollInput ] []
+                , textarea
+                    [ class "input"
+                    , value model.text
+                    , onInput UpdateText
+                    , onScroll ScrollInput
+                    ]
+                    []
                 ]
             , div [ class "extras" ]
                 [ h2 [] [ text "About" ]
@@ -70,7 +80,10 @@ view model =
                     , text " is free software released under the terms of the GNU General Public License, version 3."
                     ]
                 , h2 [] [ text "Load examples" ]
-                , select [ onInput LoadExample ] exampleOptions
+                , select
+                    [ onInput LoadExample
+                    ]
+                    exampleOptions
                 ]
             ]
         ]
