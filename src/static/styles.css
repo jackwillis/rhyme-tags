@@ -8,11 +8,11 @@ body, textarea, pre {
 }
 
 textarea, pre {
-    flex-grow: 2;
     height: 35em;
-    width: 40em;
-    min-width: 15em;
+    min-width: 30em;
+    flex-grow: 2;
     overflow: scroll;
+    white-space: pre;
     padding: 1em;
     margin: 0;
     border: 1px solid black;
@@ -21,6 +21,7 @@ textarea, pre {
 .extras {
     min-width: 7em;
     width: 20em;
+    flex-grow: 0;
 }
 
 .document span {
