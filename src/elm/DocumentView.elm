@@ -4,7 +4,7 @@ import Char
 import Color.Convert exposing (colorToCssRgb)
 import Dict exposing (Dict)
 import Html exposing (Html, div, text, span, ul, li)
-import Html.Attributes exposing (class, style)
+import Html.Attributes exposing (class, style, title)
 import Document exposing (Node(..), Document, Tag, tags)
 import Data.Palette exposing (Style, nthStyle, defaultStyle)
 import DocumentParser exposing (ParseResult)
@@ -34,10 +34,10 @@ displayErrors errors =
 
 nthLatinLetterEnclosedInACircle : Int -> Maybe Char
 nthLatinLetterEnclosedInACircle n =
-    -- Note: 0x249C = '⒜', part of Enclosed Alphanumerics block in Unicode
+    -- Note: 65 = 'A' in Unicode
     -- Expects input in range [1, 26]
     if 0 < n && n <= 26 then
-        Just <| Char.fromCode <| 0x249C + (n - 1)
+        Just <| Char.fromCode <| 65 + (n - 1)
     else
         Nothing
 
@@ -117,9 +117,9 @@ displayDocument document =
                                     )
                                   )
                                 ]
+                            , title ((getMark tag) ++ ": " ++ tag)
                             ]
                             [ Html.text text
-                            , span [ class "mark" ] [ Html.text (getMark tag) ]
                             ]
     in
         List.map displayNode document.nodes

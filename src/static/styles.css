@@ -4,7 +4,7 @@ body {
 }
 
 body, #input {
-    font: 10pt/16pt "PT Serif", "Droid Serif", "Book Antiqua", serif;
+    font: 10pt/18pt "PT Serif", "Droid Serif", "Book Antiqua", serif;
 }
 
 #columns {
@@ -31,6 +31,7 @@ body, #input {
 
 #output .rhyme {
     font-weight: bold;
+    padding: 0.125em;
 }
 
 #output .mark {
