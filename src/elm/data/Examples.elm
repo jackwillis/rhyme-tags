@@ -222,7 +222,7 @@ Share our situ{ ations: -ation }, temp{ tations: -ation }, edu{ cation: -ation }
 Ele{ vation: -ation }, maybe we can talk about Reve{ lation: -ation } 3:17
 
 [Bridge]
-Or maybe we can see a { movie: movie }
+Or maybe we can see a movie
 Or maybe we can see a { play: } on { Saturday: play }
 Or maybe we can roll a { tree: see } and feel the { breeze: see } and listen to a { symphony: see }
 Or maybe chill and just { be: see }, or { maybe: see }
@@ -247,7 +247,7 @@ Share our situ{ ations: -ation }, temp{ tations: -ation }, edu{ cation: -ation }
 Ele{ vation: -ation }, maybe we can talk about Psalms in entire{ ty: see }
 
 [Bridge]
-Or maybe we can see a { movie: movie }
+Or maybe we can see a movie
 Or maybe we can see a { play: } on { Saturday: play }
 Or maybe we can roll a { tree: see } and feel the { breeze: see } and listen to a { symphony: see }
 Or maybe chill and just { be: see }, or { maybe: see }
