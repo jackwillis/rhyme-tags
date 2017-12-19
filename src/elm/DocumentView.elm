@@ -1,11 +1,12 @@
 module DocumentView exposing (displayResult)
 
 import Char
+import Color.Convert exposing (colorToCssRgb)
 import Dict exposing (Dict)
 import Html exposing (Html, div, text, span, ul, li)
 import Html.Attributes exposing (class, style)
 import Document exposing (Node(..), Document, Tag, tags)
-import Data.Palette exposing (ColorString, nthColor)
+import Data.Palette exposing (Style, nthStyle, defaultStyle)
 import DocumentParser exposing (ParseResult)
 
 
@@ -79,12 +80,12 @@ displayDocument document =
                 |> List.indexedMap (\i tag -> ( tag, i ))
                 |> Dict.fromList
 
-        getColor : Tag -> ColorString
-        getColor tag =
+        getStyle : Tag -> Style
+        getStyle tag =
             tagIndices
                 |> Dict.get tag
-                |> Maybe.map nthColor
-                |> Maybe.withDefault ""
+                |> Maybe.map nthStyle
+                |> Maybe.withDefault defaultStyle
 
         getMark : Tag -> String
         getMark tag =
@@ -100,12 +101,25 @@ displayDocument document =
                     Html.text text
 
                 Rhyme { tag, text } ->
-                    span
-                        [ class "rhyme"
-                        , style [ ( "color", getColor tag ) ]
-                        ]
-                        [ Html.text text
-                        , span [ class "mark" ] [ Html.text (getMark tag) ]
-                        ]
+                    let
+                        style =
+                            getStyle tag
+                    in
+                        span
+                            [ class "rhyme"
+                            , Html.Attributes.style
+                                [ ( "backgroundColor", style.color |> colorToCssRgb )
+                                , ( "color"
+                                  , (if style.isDark then
+                                        "white"
+                                     else
+                                        "black"
+                                    )
+                                  )
+                                ]
+                            ]
+                            [ Html.text text
+                            , span [ class "mark" ] [ Html.text (getMark tag) ]
+                            ]
     in
         List.map displayNode document.nodes
