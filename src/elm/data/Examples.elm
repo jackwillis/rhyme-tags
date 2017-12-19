@@ -120,7 +120,8 @@ realityPoem : Example
 realityPoem =
     Example
         "Reality Poem"
-    <| String.trim """
+    <|
+        String.trim """
 
 Title: Reality Poem
 Author: Linton Kwesi Johnson
@@ -157,7 +158,7 @@ To di lite a di worl'
 An' gaan search widin
 Di dark a dem doom
 An' a shout 'bout { sin: }
-Instead a fite fi { win: }
+Instead a fite fi { win: sin }
 
 Man
 Dis is di age af { reality: }
@@ -183,7 +184,8 @@ aLongWalk : Example
 aLongWalk =
     Example
         "A Long Walk"
-    <| String.trim """
+    <|
+        String.trim """
 
 Title: A Long Walk
 Author: Jill Scott
@@ -270,7 +272,8 @@ freightTrain : Example
 freightTrain =
     Example
         "Freight Train"
-    <| String.trim """
+    <|
+        String.trim """
 
 Title: Freight Train
 Artist: Elizabeth Cotten
