@@ -7,31 +7,6 @@ body, textarea, pre {
     font: 10pt/16pt "PT Serif", "Droid Serif", "Book Antiqua", serif;
 }
 
-textarea, pre {
-    height: 35em;
-    min-width: 30em;
-    flex-grow: 2;
-    overflow: scroll;
-    white-space: pre;
-    padding: 1em;
-    margin: 0;
-    border: 1px solid black;
-}
-
-.extras {
-    min-width: 7em;
-    width: 20em;
-    flex-grow: 0;
-}
-
-.document span {
-    font-weight: bold;
-}
-
-.document .mark {
-    font-weight: normal;
-}
-
 .columns {
     display: flex;
     flex-wrap: wrap;
@@ -40,4 +15,30 @@ textarea, pre {
 
 .columns > div {
     margin: 0 0.5em;
+}
+
+.output, .input {
+    height: 35em;
+    min-width: 15em;
+    width: 30em;
+    flex-grow: 1;
+    overflow: scroll;
+    white-space: pre;
+    padding: 1em;
+    margin: 0;
+    border: 1px solid black;
+}
+
+.output .rhyme {
+    font-weight: bold;
+}
+
+.output .mark {
+    font-weight: normal;
+}
+
+.extras {
+    min-width: 7em;
+    width: 20em;
+    flex-grow: 0;
 }

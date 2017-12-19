@@ -2,14 +2,14 @@ module DocumentView exposing (displayResult)
 
 import Char
 import Dict exposing (Dict)
-import Html exposing (Html, div, text, span, pre)
+import Html exposing (Html, div, text, span, ul, li)
 import Html.Attributes exposing (class, style)
 import Document exposing (Node(..), Document, Tag, tags)
 import Data.Palette exposing (ColorString, nthColor)
 import DocumentParser exposing (ParseResult)
 
 
-displayResult : ParseResult -> Html a
+displayResult : ParseResult -> List (Html a)
 displayResult poem =
     case poem of
         Err ( _, _, errors ) ->
@@ -19,9 +19,16 @@ displayResult poem =
             displayDocument document
 
 
-displayErrors : List String -> Html a
+displayErrors : List String -> List (Html a)
 displayErrors errors =
-    div [] [ text ("Errors: " ++ Basics.toString errors) ]
+    let
+        displayError : String -> Html a
+        displayError err =
+            li [] [ text (Basics.toString err) ]
+    in
+        [ text "Errors: "
+        , ul [] (errors |> List.map displayError)
+        ]
 
 
 nthLatinLetter : Int -> Maybe Char
@@ -62,7 +69,7 @@ base26 n =
         |> String.fromList
 
 
-displayDocument : Document -> Html a
+displayDocument : Document -> List (Html a)
 displayDocument document =
     let
         tagIndices : Dict Tag Int
@@ -93,9 +100,12 @@ displayDocument document =
                     Html.text text
 
                 Rhyme { tag, text } ->
-                    span [ style [ ( "color", getColor tag ) ] ]
+                    span
+                        [ class "rhyme"
+                        , style [ ( "color", getColor tag ) ]
+                        ]
                         [ Html.text text
                         , span [ class "mark" ] [ Html.text (getMark tag) ]
                         ]
     in
-        pre [ class "document" ] (List.map displayNode document.nodes)
+        List.map displayNode document.nodes
