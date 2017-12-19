@@ -1,4 +1,4 @@
-module DocumentView exposing (displayResult, toBase, base26)
+module DocumentView exposing (displayResult)
 
 import Char
 import Dict exposing (Dict)
@@ -24,34 +24,35 @@ displayErrors errors =
     div [] [ text ("Errors: " ++ Basics.toString errors) ]
 
 
-nthLetter : Int -> Maybe Char
-nthLetter n =
+nthLatinLetter : Int -> Maybe Char
+nthLatinLetter n =
     -- Note: 0x249C = '⒜', part of Enclosed Alphanumerics block in Unicode
-    if 0 <= n && n < 26 then
-        Just <| Char.fromCode <| 0x249C + n
+    -- Expects input in range [1, 26]
+    if 0 < n && n <= 26 then
+        Just <| Char.fromCode <| 0x249C + (n - 1)
     else
         Nothing
 
 
-toBase : Int -> Int -> List Int
-toBase base v =
+digitsInBase : Int -> Int -> List Int
+digitsInBase base value =
     let
-        go : List Int -> Int -> List Int
-        go a v =
-            if v == 0 then
-                case a of
-                  [] -> [ 0 ] -- special case: `toBase n 0` should return `[ 0 ]`.
-                  _ -> a
-            else
-                go ((v % base) :: a) (v // base)
+        recur : List Int -> Int -> List Int
+        recur digits value =
+            case value of
+                0 ->
+                    digits
+
+                _ ->
+                    recur ((value % base) :: digits) (value // base)
     in
-        go [] v
+        recur [] value
 
 
 base26 : Int -> String
 base26 n =
-        toBase 26 n
-        |> List.map nthLetter
+    digitsInBase 26 (n + 1)
+        |> List.map nthLatinLetter
         |> List.filterMap identity
         |> String.fromList
 
@@ -63,7 +64,7 @@ displayDocument document =
         tagIndices =
             document
                 |> tags
-                |> List.indexedMap (flip (,))
+                |> List.indexedMap (\i tag -> ( tag, i ))
                 |> Dict.fromList
 
         getColor : Tag -> ColorString
