@@ -49,11 +49,16 @@ digitsInBase base value =
         recur [] value
 
 
+removeNothings : List (Maybe a) -> List a
+removeNothings =
+    List.filterMap identity
+
+
 base26 : Int -> String
 base26 n =
     digitsInBase 26 (n + 1)
         |> List.map nthLatinLetter
-        |> List.filterMap identity
+        |> removeNothings
         |> String.fromList
 
 
