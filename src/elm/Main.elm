@@ -1,12 +1,12 @@
 module Main exposing (main)
 
 import Array exposing (Array)
+import Data.Examples exposing (Example, aLongWalk, allExamples)
+import DocumentParser exposing (ParseResult, parse)
+import DocumentView exposing (displayResult)
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
-import DocumentParser exposing (ParseResult, parse)
-import DocumentView exposing (displayResult)
-import Data.Examples exposing (Example, aLongWalk, allExamples)
 
 
 type alias Model =
@@ -45,24 +45,37 @@ getExample index =
 view : Model -> Html Msg
 view model =
     div [ class "wrapper" ]
-        [ h1 [] [ text "rhyme-tags" ]
-        , div [ class "columns" ]
-            [ div []
-                [ h2 [] [ text "Input" ]
-                , textarea [ onInput UpdateText, value model.text ] []
+        [ h1 []
+            [ text "rhyme-tags" ]
+        , div [ id "columns" ]
+            [ div [ id "output-column" ]
+                [ h2 []
+                    [ text "Output" ]
+                , div [ id "output" ]
+                    (model.result |> displayResult)
                 ]
-            , div []
-                [ h2 [] [ text "Output" ]
-                , div [ class "output" ] [ displayResult model.result ]
+            , div [ id "input-column" ]
+                [ h2 []
+                    [ text "Input" ]
+                , textarea
+                    [ id "input"
+                    , value model.text
+                    , onInput UpdateText
+                    ]
+                    []
                 ]
-            , div [ class "extras" ]
-                [ h2 [] [ text "About" ]
+            , div [ id "extras" ]
+                [ h2 []
+                    [ text "About" ]
                 , p []
                     [ a [ href "https://github.com/jackwillis/rhyme-tags" ] [ text "rhyme-tags" ]
-                    , text " is open source software released under the terms of the GNU General Public License, version 3."
+                    , text " is free software released under the terms of the GNU General Public License, version 3."
                     ]
-                , h2 [] [ text "Load examples" ]
-                , select [ onInput LoadExample ] exampleOptions
+                , h2 []
+                    [ text "Load examples" ]
+                , select
+                    [ onInput LoadExample ]
+                    exampleOptions
                 ]
             ]
         ]

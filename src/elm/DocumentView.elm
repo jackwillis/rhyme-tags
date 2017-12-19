@@ -1,15 +1,16 @@
-module DocumentView exposing (displayResult, toBase, base26)
+module DocumentView exposing (displayResult)
 
 import Char
+import Color.Convert exposing (colorToCssRgb)
 import Dict exposing (Dict)
-import Html exposing (Html, div, text, span, pre)
-import Html.Attributes exposing (class, style)
+import Html exposing (Html, div, text, span, ul, li)
+import Html.Attributes exposing (class, style, title)
 import Document exposing (Node(..), Document, Tag, tags)
-import Data.Palette exposing (ColorString, nthColor)
+import Data.Palette exposing (Style, nthStyle, defaultStyle)
 import DocumentParser exposing (ParseResult)
 
 
-displayResult : ParseResult -> Html a
+displayResult : ParseResult -> List (Html a)
 displayResult poem =
     case poem of
         Err ( _, _, errors ) ->
@@ -19,59 +20,72 @@ displayResult poem =
             displayDocument document
 
 
-displayErrors : List String -> Html a
+displayErrors : List String -> List (Html a)
 displayErrors errors =
-    div [] [ text ("Errors: " ++ Basics.toString errors) ]
+    let
+        displayError : String -> Html a
+        displayError err =
+            li [] [ text (Basics.toString err) ]
+    in
+        [ text "Errors: "
+        , ul [] (errors |> List.map displayError)
+        ]
 
 
-nthLetter : Int -> Maybe Char
-nthLetter n =
-    -- Note: 0x249C = '⒜', part of Enclosed Alphanumerics block in Unicode
-    if 0 <= n && n < 26 then
-        Just <| Char.fromCode <| 0x249C + n
+nthLatinLetterEnclosedInACircle : Int -> Maybe Char
+nthLatinLetterEnclosedInACircle n =
+    -- Note: 65 = 'A' in Unicode
+    -- Expects input in range [1, 26]
+    if 0 < n && n <= 26 then
+        Just <| Char.fromCode <| 65 + (n - 1)
     else
         Nothing
 
 
-toBase : Int -> Int -> List Int
-toBase base v =
+digitsInBase : Int -> Int -> List Int
+digitsInBase base value =
     let
-        go : List Int -> Int -> List Int
-        go a v =
-            if v == 0 then
-                case a of
-                  [] -> [ 0 ] -- special case: `toBase n 0` should return `[ 0 ]`.
-                  _ -> a
-            else
-                go ((v % base) :: a) (v // base)
+        recur : List Int -> Int -> List Int
+        recur digits value =
+            case value of
+                0 ->
+                    digits
+
+                _ ->
+                    recur ((value % base) :: digits) (value // base)
     in
-        go [] v
+        recur [] value
+
+
+removeNothings : List (Maybe a) -> List a
+removeNothings =
+    List.filterMap identity
 
 
 base26 : Int -> String
 base26 n =
-        toBase 26 n
-        |> List.map nthLetter
-        |> List.filterMap identity
+    digitsInBase 26 (n + 1)
+        |> List.map nthLatinLetterEnclosedInACircle
+        |> removeNothings
         |> String.fromList
 
 
-displayDocument : Document -> Html a
+displayDocument : Document -> List (Html a)
 displayDocument document =
     let
         tagIndices : Dict Tag Int
         tagIndices =
             document
                 |> tags
-                |> List.indexedMap (flip (,))
+                |> List.indexedMap (\i tag -> ( tag, i ))
                 |> Dict.fromList
 
-        getColor : Tag -> ColorString
-        getColor tag =
+        getStyle : Tag -> Style
+        getStyle tag =
             tagIndices
                 |> Dict.get tag
-                |> Maybe.map nthColor
-                |> Maybe.withDefault ""
+                |> Maybe.map nthStyle
+                |> Maybe.withDefault defaultStyle
 
         getMark : Tag -> String
         getMark tag =
@@ -87,9 +101,25 @@ displayDocument document =
                     Html.text text
 
                 Rhyme { tag, text } ->
-                    span [ style [ ( "color", getColor tag ) ] ]
-                        [ Html.text text
-                        , span [ class "mark" ] [ Html.text (getMark tag) ]
-                        ]
+                    let
+                        style =
+                            getStyle tag
+                    in
+                        span
+                            [ class "rhyme"
+                            , Html.Attributes.style
+                                [ ( "backgroundColor", style.color |> colorToCssRgb )
+                                , ( "color"
+                                  , (if style.isDark then
+                                        "white"
+                                     else
+                                        "black"
+                                    )
+                                  )
+                                ]
+                            , title ((getMark tag) ++ ": " ++ tag)
+                            ]
+                            [ Html.text text
+                            ]
     in
-        pre [ class "document" ] (List.map displayNode document.nodes)
+        List.map displayNode document.nodes

@@ -3,44 +3,43 @@ body {
     padding: 1em;
 }
 
-body, textarea, input, .output pre {
-    font: 10pt/16pt "PT Serif", "Droid Serif", "Book Antiqua", serif;
+body, #input {
+    font: 10pt/18pt "PT Serif", "Droid Serif", "Book Antiqua", serif;
 }
 
-textarea, .output {
-    width: 35em;
+#columns {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+}
+
+#output-column, #input-column {
+    flex-grow: 1;
+    min-width: 15em;
+    width: 30em;
+}
+
+#output, #input {
     height: 35em;
-    overflow: auto;
+    width: calc(100% - 4em);
+    overflow: scroll;
+    white-space: pre;
     padding: 1em;
     margin: 0;
-}
-
-.extras {
-    width: 25em;
-}
-
-pre {
-    margin: 0;
-}
-
-.document span {
-    font-weight: bold;
-}
-
-.document .mark {
-    font-weight: normal;
-}
-
-.output {
     border: 1px solid black;
 }
 
-.columns {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-around;
+#output .rhyme {
+    font-weight: bold;
+    padding: 0.125em;
 }
 
-.columns > div {
-    margin: 0 0.5em;
+#output .mark {
+    font-weight: normal;
+}
+
+#extras {
+    min-width: 7em;
+    width: 20em;
+    flex-grow: 0;
 }

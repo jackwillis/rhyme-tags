@@ -22,7 +22,7 @@ Origin: Oakland, CA
 Yo, Deltron { thunderforce: }, ain't no { other source: thunderforce }
 Of { sunlight: }, two { ton mic: sunlight }, leave you { tongue-tied: sunlight }
 Runnin' amok with { technology: } with no { apology: technology }
-Shout it out to { my colony: technology } with third { eye physiology: technology }
+Shout it out to { my: } { colony: technology } with third { eye: my } { physiology: technology }
 Millennium past { apocalypse: } is { all I spit: apocalypse }
 Make you { swallow it: apocalypse }, your weak style, I'll { abolish it: apocalypse }
 With { nuclear rockets: } stay { glued to your optics: nuclear rockets } with sci-fi
