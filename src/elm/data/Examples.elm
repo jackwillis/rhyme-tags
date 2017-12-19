@@ -210,9 +210,9 @@ Your back{ ground: } it { ain't: } squeaky { clean: }, shit
 Sometimes we all got to swim up{ stream: clean }
 You ain't no { saint: ain't }, we all are { sinners: }
 But you put your good foot { down: ground } and make your soul a { winner: sinners }
-I respect { that: }, man you're so { phat: that }, and you're all { that: }, plus { supreme: }
+I respect { that: }, man you're so { phat: that }, and you're all { that: }, plus { supreme: clean }
 Then you're { humble: }, man I'm { numb, yo: humble }
-Your feeling, I can feel { everything: supreme } that you { bring: supreme }
+Your feeling, I can feel { everything: clean } that you { bring: clean }
 
 [Refrain]
 Let's take a { long: } { walk: park } around the { park: } after { dark: park }
