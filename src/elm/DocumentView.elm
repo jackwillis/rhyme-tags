@@ -31,8 +31,8 @@ displayErrors errors =
         ]
 
 
-nthLatinLetter : Int -> Maybe Char
-nthLatinLetter n =
+nthLatinLetterEnclosedInACircle : Int -> Maybe Char
+nthLatinLetterEnclosedInACircle n =
     -- Note: 0x249C = '⒜', part of Enclosed Alphanumerics block in Unicode
     -- Expects input in range [1, 26]
     if 0 < n && n <= 26 then
@@ -64,7 +64,7 @@ removeNothings =
 base26 : Int -> String
 base26 n =
     digitsInBase 26 (n + 1)
-        |> List.map nthLatinLetter
+        |> List.map nthLatinLetterEnclosedInACircle
         |> removeNothings
         |> String.fromList
 
