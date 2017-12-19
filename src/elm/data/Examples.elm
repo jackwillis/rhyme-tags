@@ -224,7 +224,7 @@ Ele{ vation: -ation }, maybe we can talk about Reve{ lation: -ation } 3:17
 [Bridge]
 Or maybe we can see a { movie: ee }
 Or maybe we can see a { play: } on { Saturday: play }
-Or maybe we can roll a { tree: ee } and feel the { breeze: ee } and listen to a { symphony: see }
+Or maybe we can roll a { tree: ee } and feel the { breeze: ee } and listen to a { symphony: ee }
 Or maybe chill and just { be: ee }, or { maybe: ee }
 Maybe we can take a { cruise: roots } and { listen: } to the { Roots: }
 Or maybe eat some { passion: listen } { fruit: roots }
@@ -249,7 +249,7 @@ Ele{ vation: -ation }, maybe we can talk about Psalms in entire{ ty: see }
 [Bridge]
 Or maybe we can see a { movie: ee }
 Or maybe we can see a { play: } on { Saturday: play }
-Or maybe we can roll a { tree: ee } and feel the { breeze: ee } and listen to a { symphony: see }
+Or maybe we can roll a { tree: ee } and feel the { breeze: ee } and listen to a { symphony: ee }
 Or maybe chill and just { be: ee }, or { maybe: ee }
 Maybe we can take a { cruise: roots } and { listen: } to the { Roots: }
 Or maybe eat some { passion: listen } { fruit: roots }
