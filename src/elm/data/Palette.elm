@@ -58,6 +58,7 @@ colorBrewerPinkYellowGreen =
 allStyles : Array Style
 allStyles =
     colorBrewerPinkYellowGreen
+        |> Array.append tolQualitative
 
 
 defaultStyle : Style
