@@ -3,24 +3,24 @@ body {
     padding: 1em;
 }
 
-body, textarea, input, .output pre {
+body, textarea, pre {
     font: 10pt/16pt "PT Serif", "Droid Serif", "Book Antiqua", serif;
 }
 
-textarea, .output {
-    width: 35em;
+textarea, pre {
+    flex-grow: 2;
     height: 35em;
-    overflow: auto;
+    width: 40em;
+    min-width: 15em;
+    overflow: scroll;
     padding: 1em;
     margin: 0;
+    border: 1px solid black;
 }
 
 .extras {
-    width: 25em;
-}
-
-pre {
-    margin: 0;
+    min-width: 7em;
+    width: 20em;
 }
 
 .document span {
@@ -31,14 +31,10 @@ pre {
     font-weight: normal;
 }
 
-.output {
-    border: 1px solid black;
-}
-
 .columns {
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-around;
+    justify-content: space-evenly;
 }
 
 .columns > div {
