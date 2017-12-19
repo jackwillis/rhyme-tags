@@ -13,15 +13,15 @@ body, textarea, pre {
     justify-content: space-evenly;
 }
 
-.columns > div {
-    margin: 0 0.5em;
+.output-column, .input-column {
+    flex-grow: 1;
+    min-width: 15em;
+    width: 30em;
 }
 
 .output, .input {
     height: 35em;
-    min-width: 15em;
-    width: 30em;
-    flex-grow: 1;
+    width: calc(100% - 4em);
     overflow: scroll;
     white-space: pre;
     padding: 1em;

@@ -55,7 +55,7 @@ view model =
     div [ class "wrapper" ]
         [ h1 [] [ text "rhyme-tags" ]
         , div [ class "columns" ]
-            [ div []
+            [ div [ class "output-column" ]
                 [ h2 [] [ text "Output" ]
                 , div
                     [ class "output"
@@ -63,7 +63,7 @@ view model =
                     ]
                     (displayResult model.result)
                 ]
-            , div []
+            , div [ class "input-column" ]
                 [ h2 [] [ text "Input" ]
                 , textarea
                     [ class "input"
