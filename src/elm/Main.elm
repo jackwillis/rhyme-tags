@@ -7,7 +7,6 @@ import DocumentView exposing (displayResult)
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
-import Json.Decode
 
 
 type alias Model =
@@ -53,8 +52,7 @@ view model =
                 [ h2 []
                     [ text "Output" ]
                 , div [ id "output" ]
-                    model.result
-                    |> displayResult
+                    (model.result |> displayResult)
                 ]
             , div [ id "input-column" ]
                 [ h2 []
