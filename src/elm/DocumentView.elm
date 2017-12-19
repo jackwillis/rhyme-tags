@@ -1,4 +1,4 @@
-module DocumentView exposing (displayResult, nthLetter)
+module DocumentView exposing (displayResult, toBase, base26)
 
 import Char
 import Dict exposing (Dict)
@@ -33,23 +33,52 @@ nthLetter n =
         Nothing
 
 
+toBase : Int -> Int -> List Int
+toBase base v =
+    let
+        go : List Int -> Int -> List Int
+        go a v =
+            if v == 0 then
+                case a of
+                  [] -> [ 0 ] -- special case: `toBase n 0` should return `[ 0 ]`.
+                  _ -> a
+            else
+                go ((v % base) :: a) (v // base)
+    in
+        go [] v
+
+
+base26 : Int -> String
+base26 n =
+        toBase 26 n
+        |> List.map nthLetter
+        |> List.filterMap identity
+        |> String.fromList
+
+
 displayDocument : Document -> Html a
 displayDocument document =
     let
-        tagPalette : Dict Tag ColorString
-        tagPalette =
+        tagIndices : Dict Tag Int
+        tagIndices =
             document
                 |> tags
-                |> List.indexedMap (\i tag -> ( tag, nthColor i ))
+                |> List.indexedMap (flip (,))
                 |> Dict.fromList
 
         getColor : Tag -> ColorString
         getColor tag =
-            tagPalette |> Dict.get tag |> Maybe.withDefault ""
+            tagIndices
+                |> Dict.get tag
+                |> Maybe.map nthColor
+                |> Maybe.withDefault ""
 
         getMark : Tag -> String
         getMark tag =
-            nthLetter 3 |> Maybe.map String.fromChar |> Maybe.withDefault ""
+            tagIndices
+                |> Dict.get tag
+                |> Maybe.map base26
+                |> Maybe.withDefault ""
 
         displayNode : Node -> Html a
         displayNode node =
@@ -60,7 +89,7 @@ displayDocument document =
                 Rhyme { tag, text } ->
                     span [ style [ ( "color", getColor tag ) ] ]
                         [ Html.text text
-                        , Html.text (getMark tag)
+                        , span [ class "mark" ] [ Html.text (getMark tag) ]
                         ]
     in
         pre [ class "document" ] (List.map displayNode document.nodes)

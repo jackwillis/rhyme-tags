@@ -49,7 +49,7 @@ view model =
         , div [ class "columns" ]
             [ div []
                 [ h2 [] [ text "Input" ]
-                , textarea [ onInput UpdateText, value model.text ] [ ]
+                , textarea [ onInput UpdateText, value model.text ] []
                 ]
             , div []
                 [ h2 [] [ text "Output" ]
