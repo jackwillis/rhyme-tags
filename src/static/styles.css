@@ -1,16 +1,34 @@
 body {
     background: white;
-    padding: 1em;
 }
 
-body, #input {
-    font: 10pt/18pt "PT Serif", "Droid Serif", "Book Antiqua", serif;
+body, textarea, select, option {
+    font: 13pt/22pt Baskerville, Palatino, "Palatino Linotype", Georgia, serif;
 }
 
 #columns {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-evenly;
+}
+
+html, body, #main, .wrapper {
+    height: 100%;
+    width: 100%;
+    position: fixed;
+    margin: 0;
+}
+
+.wrapper {
+    padding: 1em;
+}
+
+#columns {
+    width: calc(100% - 2em);
+}
+
+#columns, #output-column, #input-column {
+    height: calc(100% - 7em);
 }
 
 #output-column, #input-column {
@@ -20,18 +38,17 @@ body, #input {
 }
 
 #output, #input {
-    height: 35em;
+    height: 100%;
     width: calc(100% - 4em);
     overflow: scroll;
     white-space: pre;
     padding: 1em;
-    margin: 0;
     border: 1px solid black;
 }
 
 #output .rhyme {
     font-weight: bold;
-    padding: 0.125em;
+    padding: 0.0625em 0.125em;
 }
 
 #output .mark {
@@ -39,7 +56,6 @@ body, #input {
 }
 
 #extras {
-    min-width: 7em;
-    width: 20em;
+    width: 15em;
     flex-grow: 0;
 }
