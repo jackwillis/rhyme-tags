@@ -1,7 +1,7 @@
 module Main exposing (main)
 
 import Array exposing (Array)
-import Data.Examples exposing (Example, aLongWalk, allExamples)
+import ExampleData exposing (Example, aLongWalk, allExamples)
 import DocumentParser exposing (ParseResult, parse)
 import DocumentView exposing (displayResult)
 import Html exposing (..)
