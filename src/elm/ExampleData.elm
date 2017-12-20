@@ -1,4 +1,4 @@
-module Data.Examples exposing (..)
+module ExampleData exposing (..)
 
 import Array exposing (Array)
 
