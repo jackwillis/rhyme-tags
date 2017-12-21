@@ -1,4 +1,4 @@
-module Data.Examples exposing (..)
+module ExampleData exposing (..)
 
 import Array exposing (Array)
 
@@ -222,10 +222,10 @@ Share our situ{ ations: -ation }, temp{ tations: -ation }, edu{ cation: -ation }
 Ele{ vation: -ation }, maybe we can talk about Reve{ lation: -ation } 3:17
 
 [Bridge]
-Or maybe we can see a { movie: ee }
+Or maybe we can see a movie
 Or maybe we can see a { play: } on { Saturday: play }
-Or maybe we can roll a { tree: ee } and feel the { breeze: ee } and listen to a { symphony: ee }
-Or maybe chill and just { be: ee }, or { maybe: ee }
+Or maybe we can roll a { tree: ee } and feel the { breeze: ee } and listen to a sympho{ ny: ee }
+Or maybe chill and just { be: ee }, or maybe
 Maybe we can take a { cruise: roots } and { listen: } to the { Roots: }
 Or maybe eat some { passion: listen } { fruit: roots }
 Or maybe cry to the { blues: roots }
@@ -237,20 +237,20 @@ Let's take a { long: } { walk: park } around the { park: } after { dark: park }
 Find a { spot: long } for us to { spark: park }
 Conver{ sation: -ation }, verbal e{ lation: -ation }, stimu{ lation: -ation }
 Share our situ{ ations: -ation }, temp{ tations: -ation }, edu{ cation: -ation }, relax{ ation: -ation }
-Ele{ vation: -ation }, maybe we can talk about Psalms in entire{ ty: see }
+Ele{ vation: -ation }, maybe we can talk about Psalms in entire{ ty: ee }
 
 [Refrain]
 Let's take a { long: } { walk: park } around the { park: } after { dark: park }
 Find a { spot: long } for us to { spark: park }
 Conver{ sation: -ation }, verbal e{ lation: -ation }, stimu{ lation: -ation }
 Share our situ{ ations: -ation }, temp{ tations: -ation }, edu{ cation: -ation }, relax{ ation: -ation }
-Ele{ vation: -ation }, maybe we can talk about Psalms in entire{ ty: see }
+Ele{ vation: -ation }, maybe we can talk about Psalms in entire{ ty: ee }
 
 [Bridge]
-Or maybe we can see a { movie: ee }
+Or maybe we can see a movie
 Or maybe we can see a { play: } on { Saturday: play }
-Or maybe we can roll a { tree: ee } and feel the { breeze: ee } and listen to a { symphony: ee }
-Or maybe chill and just { be: ee }, or { maybe: ee }
+Or maybe we can roll a { tree: ee } and feel the { breeze: ee } and listen to a sympho{ ny: ee }
+Or maybe chill and just { be: ee }, or maybe
 Maybe we can take a { cruise: roots } and { listen: } to the { Roots: }
 Or maybe eat some { passion: listen } { fruit: roots }
 Or maybe cry to the { blues: roots }

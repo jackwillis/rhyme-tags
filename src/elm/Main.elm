@@ -1,7 +1,7 @@
 module Main exposing (main)
 
 import Array exposing (Array)
-import Data.Examples exposing (Example, aLongWalk, allExamples)
+import ExampleData exposing (Example, aLongWalk, allExamples)
 import DocumentParser exposing (ParseResult, parse)
 import DocumentView exposing (displayResult)
 import Html exposing (..)
@@ -23,15 +23,20 @@ type Msg
     | LoadExample String
 
 
-exampleOptions : List (Html a)
-exampleOptions =
+exampleSelector : Html Msg
+exampleSelector =
     let
+        optionFor : Int -> Example -> Html a
         optionFor n example =
             option [ value (toString n) ] [ text example.title ]
+
+        options : List (Html a)
+        options =
+            allExamples
+                |> Array.indexedMap optionFor
+                |> Array.toList
     in
-        allExamples
-            |> Array.indexedMap optionFor
-            |> Array.toList
+        select [ onInput LoadExample ] options
 
 
 getExample : String -> Maybe Example
@@ -44,38 +49,39 @@ getExample index =
 
 view : Model -> Html Msg
 view model =
-    div [ class "wrapper" ]
-        [ h1 []
-            [ text "rhyme-tags" ]
+    div [ id "wrapper" ]
+        [ header []
+            [ h1 []
+                [ text "rhyme-tags" ]
+            ]
         , div [ id "columns" ]
-            [ div [ id "output-column" ]
-                [ h2 []
-                    [ text "Output" ]
-                , div [ id "output" ]
-                    (model.result |> displayResult)
-                ]
-            , div [ id "input-column" ]
-                [ h2 []
-                    [ text "Input" ]
-                , textarea
-                    [ id "input"
-                    , value model.text
-                    , onInput UpdateText
-                    ]
-                    []
-                ]
-            , div [ id "extras" ]
-                [ h2 []
-                    [ text "About" ]
+            [ div [ id "control-column" ]
+                [ h2 [] [ text "examples" ]
+                , exampleSelector
+                , h2 [] [ text "help" ]
                 , p []
-                    [ a [ href "https://github.com/jackwillis/rhyme-tags" ] [ text "rhyme-tags" ]
-                    , text " is free software released under the terms of the GNU General Public License, version 3."
+                    [ text "usage information and source code is available on the "
+                    , a [ href "https://github.com/jackwillis/rhyme-tags" ] [ text "project website" ]
+                    , text "."
                     ]
-                , h2 []
-                    [ text "Load examples" ]
-                , select
-                    [ onInput LoadExample ]
-                    exampleOptions
+                , h2 [] [ text "about" ]
+                , p []
+                    [ text "rhyme-tags is free software released under the GNU "
+                    , a [ href "https://www.gnu.org/licenses/gpl-3.0.en.html" ] [ text "General Public License" ]
+                    , text ", version 3."
+                    ]
+                ]
+            , div [ id "data-columns" ]
+                [ div [ id "input-column" ]
+                    [ textarea
+                        [ id "input"
+                        , value model.text
+                        , onInput UpdateText
+                        ]
+                        []
+                    ]
+                , div [ id "output-column" ]
+                    [ div [ id "output" ] (displayResult model.result) ]
                 ]
             ]
         ]
