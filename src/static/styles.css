@@ -1,49 +1,116 @@
-body {
-    background: white;
+body, select, textarea {
+    font: 12pt/19pt serif;
 }
 
-body, textarea, select, option {
-    font: 13pt/22pt Baskerville, Palatino, "Palatino Linotype", Georgia, serif;
+h1, h2 {
+    font-family: sans-serif;
 }
 
-#columns {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-evenly;
-}
-
-html, body, #main, .wrapper {
-    height: 100%;
-    width: 100%;
-    position: fixed;
+body, h1 {
     margin: 0;
+    padding: 0;
 }
 
-.wrapper {
-    padding: 1em;
+p, h2 {
+    margin: 0.5em 0;
+}
+
+header, #columns > * {
+    padding: 0 0.5em;
+}
+
+html, body, #elm, #wrapper, #columns > * {
+    height: 100%;
+}
+
+header {
+    height: 2em;
+    padding: 0.5em;
+}
+
+h1 {
+    position: relative;
+    top: 0.125em;
 }
 
 #columns {
-    width: calc(100% - 2em);
+    padding: 0.5em 0;
+    height: calc(100% - 4em);
+
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
 }
 
-#columns, #output-column, #input-column {
-    height: calc(100% - 7em);
-}
+#data-columns {
+    height: 100%;
+    overflow: auto;
 
-#output-column, #input-column {
     flex-grow: 1;
     min-width: 15em;
-    width: 30em;
+    max-width: calc(100% - 10.5em);
+
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+#input-column, #output-column {
+    width: 50%;
 }
 
 #output, #input {
-    height: 100%;
-    width: calc(100% - 4em);
-    overflow: scroll;
     white-space: pre;
-    padding: 1em;
-    border: 1px solid black;
+    min-height: 2000px;
+    resize: none;
+
+    width: calc(100% - 1em);
+}
+
+textarea,
+select {
+    margin: 0;
+    border: 2px solid black;
+    box-sizing: border-box;
+}
+
+textarea:hover {
+    outline: 0;
+    border-color: gray;
+}
+
+textarea:focus,
+select:focus {
+    outline: 0;
+    border-color: mediumblue;
+}
+
+#input {
+    border-bottom: none;
+    padding: 0.5em 1em;
+}
+
+#output {
+    padding: 0.5em;
+}
+
+
+select {
+    margin: 0.5em 0;
+    padding: 0.125em;
+}
+
+#control-column {
+    width: 10em;
+}
+
+#control-column > h2:first-child {
+    margin-top: 0;
+}
+
+#control-column select {
+    width: 100%;
 }
 
 #output .rhyme {
@@ -53,9 +120,4 @@ html, body, #main, .wrapper {
 
 #output .mark {
     font-weight: normal;
-}
-
-#extras {
-    width: 15em;
-    flex-grow: 0;
 }
