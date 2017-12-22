@@ -40,7 +40,7 @@ h1 {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
-    justify-content: space-between;
+    justify-content: space-evenly;
 }
 
 #data-columns {
@@ -62,33 +62,26 @@ h1 {
 
 #output, #input {
     white-space: pre;
-    min-height: 2000px;
-    resize: none;
-
     width: calc(100% - 1em);
 }
 
 textarea,
 select {
     margin: 0;
-    border: 2px solid black;
+    border: 3px solid black;
     box-sizing: border-box;
-}
-
-textarea:hover {
-    outline: 0;
-    border-color: gray;
 }
 
 textarea:focus,
 select:focus {
     outline: 0;
-    border-color: mediumblue;
+    border-color: blue;
 }
 
 #input {
     border-bottom: none;
-    padding: 0.5em 1em;
+    padding: calc(0.5em - 3px) 1em;
+    overflow-x: auto;
 }
 
 #output {
@@ -120,4 +113,20 @@ select {
 
 #output .mark {
     font-weight: normal;
+}
+
+@media print {
+    #output {
+        -webkit-print-color-adjust: exact;
+        color-adjust: exact;
+    }
+
+    header, #control-column, #input-column {
+        display: none;
+    }
+
+    * {
+        min-height: 0;
+        height: auto !important;
+    }
 }
