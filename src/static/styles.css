@@ -71,11 +71,12 @@ h1 {
 textarea,
 select {
     margin: 0;
-    border: 2px solid black;
+    border: 3px solid black;
     box-sizing: border-box;
 }
 
-textarea:hover {
+textarea:hover,
+select:hover {
     outline: 0;
     border-color: gray;
 }

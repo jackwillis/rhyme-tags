@@ -3,13 +3,12 @@ module DocumentView exposing (displayResult)
 import Array exposing (Array, fromList, append, get, length)
 import Char
 import Color exposing (Color, rgb)
-import Color.Convert exposing (colorToCssRgb)
-import Dict exposing (Dict)
+import Color.Convert
 import Html exposing (Html, div, text, span, ul, li)
 import Html.Attributes exposing (class, style, title)
-import Document exposing (Node(..), Document, Tag, tags)
+import Document exposing (Node(Text, Rhyme), Document, Tag)
 import DocumentParser exposing (ParseResult)
-import Maybe exposing (withDefault)
+import Maybe
 
 
 displayResult : ParseResult -> List (Html a)
@@ -34,14 +33,20 @@ displayErrors errors =
         ]
 
 
-nthLatinLetterEnclosedInACircle : Int -> Maybe Char
-nthLatinLetterEnclosedInACircle n =
+nthLatinLetter : Int -> Maybe Char
+nthLatinLetter n =
     -- Note: 65 = 'A' in Unicode
     -- Expects input in range [1, 26]
     if 0 < n && n <= 26 then
         Just <| Char.fromCode <| 65 + (n - 1)
     else
         Nothing
+
+
+
+-- digitsInBase 10 1196 == [1, 1, 9, 6]
+-- digitsInBase 16 1196 == [4, 10, 12]
+-- digitsInBase  2 1196 == [1, 0, 0, 1, 0, 1, 0, 1, 1, 0, 0]
 
 
 digitsInBase : Int -> Int -> List Int
@@ -66,8 +71,9 @@ removeNothings =
 
 base26 : Int -> String
 base26 n =
-    digitsInBase 26 (n + 1)
-        |> List.map nthLatinLetterEnclosedInACircle
+    (n + 1)
+        |> digitsInBase 26
+        |> List.map nthLatinLetter
         |> removeNothings
         |> String.fromList
 
@@ -141,30 +147,48 @@ nthStyle n =
             n % length allStyles
     in
         get index allStyles
-            |> withDefault defaultStyle
+            |> Maybe.withDefault defaultStyle
+
+
+backgroundColor : Style -> String
+backgroundColor style =
+    style.color |> Color.Convert.colorToCssRgb
+
+
+foregroundColor : Style -> String
+foregroundColor style =
+    if style.isDark then
+        "white"
+    else
+        "black"
+
+
+toStyleAttribute : Style -> Html.Attribute a
+toStyleAttribute style =
+    Html.Attributes.style
+        [ ( "backgroundColor", style |> backgroundColor )
+        , ( "color", style |> foregroundColor )
+        ]
 
 
 displayDocument : Document -> List (Html a)
 displayDocument document =
     let
-        tagIndices : Dict Tag Int
-        tagIndices =
-            document
-                |> tags
-                |> List.indexedMap (\i tag -> ( tag, i ))
-                |> Dict.fromList
+        indexOf : Tag -> Maybe Int
+        indexOf =
+            Document.tagIndex document
 
         getStyle : Tag -> Style
         getStyle tag =
-            tagIndices
-                |> Dict.get tag
+            tag
+                |> indexOf
                 |> Maybe.map nthStyle
                 |> Maybe.withDefault defaultStyle
 
         getMark : Tag -> String
         getMark tag =
-            tagIndices
-                |> Dict.get tag
+            tag
+                |> indexOf
                 |> Maybe.map base26
                 |> Maybe.withDefault ""
 
@@ -176,24 +200,20 @@ displayDocument document =
 
                 Rhyme { tag, text } ->
                     let
+                        style : Style
                         style =
                             getStyle tag
+
+                        titleText : String
+                        titleText =
+                            "'" ++ text ++ "' is in group " ++ (tag |> getMark) ++ " (rhymes with '" ++ tag ++ ".')"
                     in
                         span
                             [ class "rhyme"
-                            , Html.Attributes.style
-                                [ ( "backgroundColor", style.color |> colorToCssRgb )
-                                , ( "color"
-                                  , (if style.isDark then
-                                        "white"
-                                     else
-                                        "black"
-                                    )
-                                  )
-                                ]
-                            , title ((getMark tag) ++ ": " ++ tag)
+                            , style |> toStyleAttribute
+                            , title titleText
                             ]
-                            [ Html.text text
-                            ]
+                            [ Html.text text ]
     in
-        List.map displayNode document.nodes
+        document.nodes
+            |> List.map displayNode

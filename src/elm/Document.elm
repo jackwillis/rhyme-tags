@@ -1,14 +1,16 @@
 module Document
     exposing
         ( Tag
-        , Node(..)
+        , Node(Text, Rhyme)
         , Document
         , getText
         , getTag
         , tags
+        , tagIndex
         )
 
-import List.Extra exposing (unique)
+import Dict exposing (Dict)
+import List.Extra as List
 
 
 type alias Tag =
@@ -53,4 +55,17 @@ tags : Document -> List Tag
 tags document =
     document.nodes
         |> List.filterMap getTag
-        |> unique
+        |> List.unique
+
+
+tagIndex : Document -> Tag -> Maybe Int
+tagIndex document tag =
+    let
+        dict : Dict Tag Int
+        dict =
+            document
+                |> tags
+                |> List.indexedMap (\i tag -> ( tag, i ))
+                |> Dict.fromList
+    in
+        Dict.get tag dict
