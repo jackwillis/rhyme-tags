@@ -1,9 +1,9 @@
 require("../static/styles.css");
 
-const wrapper = document.getElementById("elm");
-const app = require("../elm/Main").Main.embed(wrapper);
+var wrapper = document.getElementById("elm");
+var app = require("../elm/Main").Main.embed(wrapper);
 
-app.ports.resizeInput.subscribe(() => {
-    const input = document.getElementById("input");
+app.ports.resizeInput.subscribe(function() {
+    var input = document.getElementById("input");
     input.style.height = "calc(" + input.scrollHeight + "px + 2em)";
 });
