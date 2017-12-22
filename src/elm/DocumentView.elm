@@ -2,22 +2,20 @@ module DocumentView exposing (displayResult)
 
 import Array exposing (Array, fromList, append, get, length)
 import Char
-import Color exposing (Color, rgb)
-import Color.Convert
+import Color exposing (Color, rgb, black, white)
+import Color.Convert as Convert
+import Document exposing (Node(Text, Rhyme), Document, Tag)
 import Html exposing (Html, div, text, span, ul, li)
 import Html.Attributes exposing (class, style, title)
-import Document exposing (Node(Text, Rhyme), Document, Tag)
-import DocumentParser exposing (ParseResult)
-import Maybe
 
 
-displayResult : ParseResult -> List (Html a)
-displayResult poem =
-    case poem of
-        Err ( _, _, errors ) ->
+displayResult : Result (List String) Document -> List (Html a)
+displayResult result =
+    case result of
+        Err errors ->
             displayErrors errors
 
-        Ok ( _, _, document ) ->
+        Ok document ->
             displayDocument document
 
 
@@ -78,96 +76,85 @@ base26 n =
         |> String.fromList
 
 
-type alias Style =
-    { color : Color, isDark : Bool }
+type alias ColorScheme =
+    { backgroundColor : Color
+    , textColor : Color
+    }
 
 
-tolQualitative : Array Style
+tolQualitative : Array ColorScheme
 tolQualitative =
     fromList
-        [ Style (rgb 51 34 136) True
-        , Style (rgb 102 153 204) False
-        , Style (rgb 136 204 238) False
-        , Style (rgb 68 170 153) False
-        , Style (rgb 17 119 51) True
-        , Style (rgb 153 153 51) False
-        , Style (rgb 221 204 119) False
-        , Style (rgb 102 17 0) True
-        , Style (rgb 204 102 119) False
-        , Style (rgb 170 68 102) True
-        , Style (rgb 136 34 85) True
-        , Style (rgb 170 68 153) True
+        [ ColorScheme (rgb 51 34 136) white
+        , ColorScheme (rgb 102 153 204) black
+        , ColorScheme (rgb 136 204 238) black
+        , ColorScheme (rgb 68 170 153) black
+        , ColorScheme (rgb 17 119 51) white
+        , ColorScheme (rgb 153 153 51) black
+        , ColorScheme (rgb 221 204 119) black
+        , ColorScheme (rgb 102 17 0) white
+        , ColorScheme (rgb 204 102 119) black
+        , ColorScheme (rgb 170 68 102) white
+        , ColorScheme (rgb 136 34 85) white
+        , ColorScheme (rgb 170 68 153) white
         ]
 
 
-tolRainbow : Array Style
+tolRainbow : Array ColorScheme
 tolRainbow =
     fromList
-        [ Style (rgb 120 28 129) True
-        , Style (rgb 64 67 153) True
-        , Style (rgb 72 139 194) True
-        , Style (rgb 107 178 140) False
-        , Style (rgb 159 190 87) False
-        , Style (rgb 210 179 63) False
-        , Style (rgb 231 126 49) False
-        , Style (rgb 217 33 32) True
+        [ ColorScheme (rgb 120 28 129) white
+        , ColorScheme (rgb 64 67 153) white
+        , ColorScheme (rgb 72 139 194) white
+        , ColorScheme (rgb 107 178 140) black
+        , ColorScheme (rgb 159 190 87) black
+        , ColorScheme (rgb 210 179 63) black
+        , ColorScheme (rgb 231 126 49) black
+        , ColorScheme (rgb 217 33 32) white
         ]
 
 
-colorBrewerPinkYellowGreen : Array Style
+colorBrewerPinkYellowGreen : Array ColorScheme
 colorBrewerPinkYellowGreen =
     fromList
-        [ Style (rgb 197 27 125) True
-        , Style (rgb 222 119 174) False
-        , Style (rgb 241 182 218) False
-        , Style (rgb 253 224 239) False
-        , Style (rgb 230 245 208) False
-        , Style (rgb 184 225 134) False
-        , Style (rgb 127 188 65) False
-        , Style (rgb 77 146 33) True
+        [ ColorScheme (rgb 197 27 125) white
+        , ColorScheme (rgb 222 119 174) black
+        , ColorScheme (rgb 241 182 218) black
+        , ColorScheme (rgb 253 224 239) black
+        , ColorScheme (rgb 230 245 208) black
+        , ColorScheme (rgb 184 225 134) black
+        , ColorScheme (rgb 127 188 65) black
+        , ColorScheme (rgb 77 146 33) white
         ]
 
 
-allStyles : Array Style
-allStyles =
+allSchemes : Array ColorScheme
+allSchemes =
     colorBrewerPinkYellowGreen
         |> Array.append tolQualitative
 
 
-defaultStyle : Style
-defaultStyle =
-    Style Color.white False
+defaultScheme : ColorScheme
+defaultScheme =
+    ColorScheme white black
 
 
-nthStyle : Int -> Style
-nthStyle n =
+nthScheme : Int -> ColorScheme
+nthScheme n =
     let
         index : Int
         index =
-            n % length allStyles
+            n % length allSchemes
     in
-        get index allStyles
-            |> Maybe.withDefault defaultStyle
+        get index allSchemes
+            |> Maybe.withDefault defaultScheme
 
 
-backgroundColor : Style -> String
-backgroundColor style =
-    style.color |> Color.Convert.colorToCssRgb
-
-
-foregroundColor : Style -> String
-foregroundColor style =
-    if style.isDark then
-        "white"
-    else
-        "black"
-
-
-toStyleAttribute : Style -> Html.Attribute a
-toStyleAttribute style =
-    Html.Attributes.style
-        [ ( "backgroundColor", style |> backgroundColor )
-        , ( "color", style |> foregroundColor )
+toStyleAttribute : ColorScheme -> Html.Attribute a
+toStyleAttribute scheme =
+    style
+        [ ( "backgroundColor", scheme.backgroundColor |> Convert.colorToCssRgba )
+        , ( "color", scheme.textColor |> Convert.colorToCssRgba )
         ]
 
 
@@ -178,12 +165,12 @@ displayDocument document =
         indexOf =
             Document.tagIndex document
 
-        getStyle : Tag -> Style
-        getStyle tag =
+        getScheme : Tag -> ColorScheme
+        getScheme tag =
             tag
                 |> indexOf
-                |> Maybe.map nthStyle
-                |> Maybe.withDefault defaultStyle
+                |> Maybe.map nthScheme
+                |> Maybe.withDefault defaultScheme
 
         getMark : Tag -> String
         getMark tag =
@@ -200,18 +187,14 @@ displayDocument document =
 
                 Rhyme { tag, text } ->
                     let
-                        style : Style
-                        style =
-                            getStyle tag
-
-                        titleText : String
-                        titleText =
+                        hoverText : String
+                        hoverText =
                             "'" ++ text ++ "' is in group " ++ (tag |> getMark) ++ " (rhymes with '" ++ tag ++ ".')"
                     in
                         span
                             [ class "rhyme"
-                            , style |> toStyleAttribute
-                            , title titleText
+                            , tag |> getScheme |> toStyleAttribute
+                            , title hoverText
                             ]
                             [ Html.text text ]
     in

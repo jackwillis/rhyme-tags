@@ -1,26 +1,32 @@
-module Main exposing (main)
+port module Main exposing (main)
 
 import Array exposing (Array)
 import ExampleData exposing (Example, aLongWalk, allExamples)
-import DocumentParser exposing (ParseResult, parse)
+import Document exposing (Document)
+import DocumentParser exposing (parse)
 import DocumentView exposing (displayResult)
 import Html exposing (..)
 import Html.Attributes exposing (..)
-import Html.Events exposing (..)
+import Html.Events exposing (on, onInput)
 
 
 type alias Model =
-    { text : String, result : ParseResult }
+    { text : String, result : Result (List String) Document }
 
 
 init : ( Model, Cmd Msg )
 init =
-    ( Model aLongWalk.body (parse aLongWalk.body), Cmd.none )
+    ( Model aLongWalk.body (parse aLongWalk.body), resizeInput () )
 
 
 type Msg
     = UpdateText String
     | LoadExample String
+
+
+{-| Make sure the <textarea id="input"> is at least as tall as its contents.
+-}
+port resizeInput : () -> Cmd a
 
 
 exampleSelector : Html Msg
@@ -75,8 +81,8 @@ view model =
                 [ div [ id "input-column" ]
                     [ textarea
                         [ id "input"
-                        , value model.text
                         , onInput UpdateText
+                        , value model.text
                         ]
                         []
                     ]
@@ -96,15 +102,15 @@ update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
         UpdateText text ->
-            ( model |> updateText text, Cmd.none )
+            ( model |> updateText text, resizeInput () )
 
         LoadExample num ->
             case (getExample num) of
                 Just example ->
-                    ( model |> updateText example.body, Cmd.none )
+                    ( model |> updateText example.body, resizeInput () )
 
                 Nothing ->
-                    ( { model | text = "No such example #" ++ num, result = parse "" }, Cmd.none )
+                    ( { model | text = "No such example #" ++ num, result = parse "" }, resizeInput () )
 
 
 subscriptions : Model -> Sub Msg
