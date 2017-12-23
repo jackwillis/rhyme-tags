@@ -1,12 +1,15 @@
 module Document.View exposing (displayResult)
 
-{-| Document.View exports `displayResult`, the view function for the output column.
+{-| This module contains the view function `displayResult`,
+which builds the contents of the output column,
+and its associated helper functions,
+notably all functions related to color.
 
 @docs displayResult
 
 -}
 
-import Array exposing (Array, fromList, append, get, length)
+import Array exposing (Array, length)
 import Char
 import Color exposing (Color, rgb, black, white)
 import Color.Convert as Convert
@@ -17,7 +20,7 @@ import Html.Attributes exposing (class, style, title)
 import Html.Lazy exposing (lazy)
 
 
-{-| Build the view for the result/output column.
+{-| This view generates the contents of the output column.
 -}
 displayResult : Result (List Parser.Error) Document -> Html a
 displayResult result =
@@ -29,6 +32,8 @@ displayResult result =
             displayDocument document
 
 
+{-| Displays a list of parser errors.
+-}
 displayErrors : List Parser.Error -> Html a
 displayErrors errors =
     let
@@ -42,93 +47,6 @@ displayErrors errors =
             ]
 
 
-{-| Returns the *n*th uppercase latin letter.
-
-Expects inputs in range [1, 26].
-
-    ...
-    nthLatinLetter  0 == Nothing
-    nthLatinLetter  1 == Just 'A'
-    nthLatinLetter  2 == Just 'B'
-    ...
-    nthLatinLetter 25 == Just 'Y'
-    nthLatinLetter 26 == Just 'Z'
-    nthLatinLetter 27 == Nothing
-    ...
-
--}
-nthLatinLetter : Int -> Maybe Char
-nthLatinLetter n =
-    if 0 < n && n <= 26 then
-        -- Note: 65 = 'A' in Unicode
-        Just <| Char.fromCode <| 65 + (n - 1)
-    else
-        Nothing
-
-
-{-| Converts an integer to another base, as a list of digits.
-Examples using the value 1196:
-
-    | Some radix *n* | 1196 in base *n* | `digitsInBase n 1196`             |
-    |----------------|------------------|-----------------------------------|
-    | 10             | 1192             | [1, 1, 9, 6]                      |
-    | 16             | 0x4ac            | [4, 10, 12]                       |
-    | 2              | 0b10010101100    | [1, 0, 0, 1, 0, 1, 0, 1, 1, 0, 0] |
-
-Note that this function is unsafe with values over 2^32.
-
--}
-digitsInBase : Int -> Int -> List Int
-digitsInBase base value =
-    -- Adapted from an example on Rosetta Code.
-    -- I tried to make it a bit more readable (yikes).
-    let
-        buildDigits : List Int -> Int -> List Int
-        buildDigits digits value =
-            case value of
-                0 ->
-                    digits
-
-                _ ->
-                    let
-                        -- The value without the last digit
-                        div : Int
-                        div =
-                            value // base
-
-                        -- The value's last digit
-                        mod : Int
-                        mod =
-                            value % base
-                    in
-                        buildDigits (mod :: digits) div
-    in
-        buildDigits [] value
-
-
-{-| Takes a list of Maybes and returns a list of all the Just values.
-
-    maybeList : List (Maybe Int)
-    maybeList =
-        [ Just 4, Nothing, Just 0, Just 6, Nothing ]
-
-    maybeList |> catMaybes == [ 4, 0, 6 ]
-
--}
-catMaybes : List (Maybe a) -> List a
-catMaybes =
-    List.filterMap identity
-
-
-base26 : Int -> String
-base26 n =
-    (n + 1)
-        |> digitsInBase 26
-        |> List.map nthLatinLetter
-        |> catMaybes
-        |> String.fromList
-
-
 type alias ColorScheme =
     { backgroundColor : Color
     , textColor : Color
@@ -137,7 +55,7 @@ type alias ColorScheme =
 
 tolQualitative : Array ColorScheme
 tolQualitative =
-    fromList
+    Array.fromList
         [ ColorScheme (rgb 51 34 136) white
         , ColorScheme (rgb 102 153 204) black
         , ColorScheme (rgb 136 204 238) black
@@ -155,7 +73,7 @@ tolQualitative =
 
 tolRainbow : Array ColorScheme
 tolRainbow =
-    fromList
+    Array.fromList
         [ ColorScheme (rgb 120 28 129) white
         , ColorScheme (rgb 64 67 153) white
         , ColorScheme (rgb 72 139 194) white
@@ -169,7 +87,7 @@ tolRainbow =
 
 colorBrewerPinkYellowGreen : Array ColorScheme
 colorBrewerPinkYellowGreen =
-    fromList
+    Array.fromList
         [ ColorScheme (rgb 197 27 125) white
         , ColorScheme (rgb 222 119 174) black
         , ColorScheme (rgb 241 182 218) black
@@ -199,7 +117,7 @@ nthScheme n =
         index =
             n % length allSchemes
     in
-        get index allSchemes
+        Array.get index allSchemes
             |> Maybe.withDefault defaultScheme
 
 
@@ -225,24 +143,22 @@ displayDocument document =
                 |> Maybe.map nthScheme
                 |> Maybe.withDefault defaultScheme
 
-        getMark : Tag -> String
-        getMark tag =
-            tag
-                |> indexOf
-                |> Maybe.map base26
-                |> Maybe.withDefault ""
-
         hoverText : Tag -> String -> String
         hoverText tag text =
-            String.concat
-                [ "'"
-                , text
-                , "' is in group "
-                , (tag |> getMark)
-                , " (rhymes with '"
-                , tag
-                , ".')"
-                ]
+            let
+                groupName : String
+                groupName =
+                    tag |> indexOf |> Maybe.withDefault 0 |> toString
+            in
+                String.concat
+                    [ "'"
+                    , text
+                    , "' is in group "
+                    , groupName
+                    , " (rhymes with '"
+                    , tag
+                    , ".')"
+                    ]
 
         displayNode : Node -> Html a
         displayNode node =
