@@ -1,4 +1,4 @@
-module DocumentParser exposing (parse, Error)
+module Document.Parser exposing (parse, Error)
 
 import Combine exposing (ParseErr, ParseOk, Parser, many, string, end, (<$>), (<|>), (<*), (*>), (<*>))
 import Combine.Char exposing (char, noneOf)

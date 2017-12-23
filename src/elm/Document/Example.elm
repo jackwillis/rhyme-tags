@@ -1,4 +1,4 @@
-module ExampleData exposing (..)
+module Document.Example exposing (..)
 
 import Array exposing (Array)
 
@@ -308,6 +308,6 @@ They won't know what route I'm { going: on }
     """
 
 
-allExamples : Array Example
-allExamples =
+all : Array Example
+all =
     Array.fromList [ aLongWalk, freightTrain, harlemSweeties, realityPoem, thingsYouCanDo ]

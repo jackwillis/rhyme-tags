@@ -1,13 +1,19 @@
 port module Main exposing (main)
 
-import Array exposing (Array)
-import ExampleData exposing (Example)
+import Array
 import Document exposing (Document)
-import DocumentParser as Parser
-import DocumentView exposing (displayResult)
+import Document.Example as Example exposing (Example)
+import Document.Parser as Parser
+import Document.View exposing (displayResult)
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (on, onInput)
+
+
+{-| This runs a small bit of Javascript, located in ../static/index.js,
+which ensures the page's input textarea is at least as tall as its contents.
+-}
+port resizeInput : () -> Cmd a
 
 
 type alias Model =
@@ -16,12 +22,14 @@ type alias Model =
 
 initExample : Example
 initExample =
-    ExampleData.aLongWalk
+    Example.aLongWalk
 
 
 init : ( Model, Cmd Msg )
 init =
-    ( Model initExample.body (initExample.body |> Parser.parse), resizeInput () )
+    ( Model initExample.body (initExample.body |> Parser.parse)
+    , resizeInput ()
+    )
 
 
 type Msg
@@ -29,13 +37,8 @@ type Msg
     | LoadExample String
 
 
-{-| Make sure the `<textarea id="input">` is at least as tall as its contents.
--}
-port resizeInput : () -> Cmd a
-
-
-exampleSelector : Html Msg
-exampleSelector =
+exampleSelector : (String -> msg) -> Html msg
+exampleSelector msgVariant =
     let
         optionFor : Int -> Example -> Html a
         optionFor n example =
@@ -43,11 +46,11 @@ exampleSelector =
 
         options : List (Html a)
         options =
-            ExampleData.allExamples
+            Example.all
                 |> Array.indexedMap optionFor
                 |> Array.toList
     in
-        select [ onInput LoadExample ] options
+        select [ onInput msgVariant ] options
 
 
 getExample : String -> Maybe Example
@@ -55,7 +58,7 @@ getExample index =
     index
         |> String.toInt
         |> Result.toMaybe
-        |> Maybe.andThen (\i -> Array.get i allExamples)
+        |> Maybe.andThen (\i -> Array.get i Example.all)
 
 
 view : Model -> Html Msg
@@ -68,7 +71,7 @@ view model =
         , div [ id "columns" ]
             [ div [ id "control-column" ]
                 [ h2 [] [ text "examples" ]
-                , exampleSelector
+                , exampleSelector LoadExample
                 , h2 [] [ text "help" ]
                 , p []
                     [ text "usage information and source code is available on the "
@@ -100,22 +103,31 @@ view model =
 
 updateText : String -> Model -> Model
 updateText text model =
-    { model | text = text, result = Parser.parse text }
+    { model
+        | text = text
+        , result = Parser.parse text
+    }
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
         UpdateText text ->
-            ( model |> updateText text, resizeInput () )
+            ( model |> updateText text
+            , resizeInput ()
+            )
 
         LoadExample num ->
-            case (getExample num) of
+            case num |> getExample of
                 Just example ->
-                    ( model |> updateText example.body, resizeInput () )
+                    ( model |> updateText example.body
+                    , resizeInput ()
+                    )
 
                 Nothing ->
-                    ( { model | text = "No such example #" ++ num, result = Parser.parse "" }, resizeInput () )
+                    ( model |> updateText ("No such example number: " ++ num)
+                    , resizeInput ()
+                    )
 
 
 subscriptions : Model -> Sub Msg

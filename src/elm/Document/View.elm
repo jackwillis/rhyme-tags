@@ -1,6 +1,6 @@
-module DocumentView exposing (displayResult)
+module Document.View exposing (displayResult)
 
-{-| DocumentView exports `displayResult`, the view function for the output column.
+{-| Document.View exports `displayResult`, the view function for the output column.
 
 @docs displayResult
 
@@ -11,7 +11,7 @@ import Char
 import Color exposing (Color, rgb, black, white)
 import Color.Convert as Convert
 import Document exposing (Node(Text, Rhyme), Document, Tag)
-import DocumentParser as Parser
+import Document.Parser as Parser
 import Html exposing (Html, div, text, span, ul, li, h3)
 import Html.Attributes exposing (class, style, title)
 import Html.Lazy exposing (lazy)
@@ -232,6 +232,18 @@ displayDocument document =
                 |> Maybe.map base26
                 |> Maybe.withDefault ""
 
+        hoverText : Tag -> String -> String
+        hoverText tag text =
+            String.concat
+                [ "'"
+                , text
+                , "' is in group "
+                , (tag |> getMark)
+                , " (rhymes with '"
+                , tag
+                , ".')"
+                ]
+
         displayNode : Node -> Html a
         displayNode node =
             case node of
@@ -239,17 +251,12 @@ displayDocument document =
                     Html.text text
 
                 Rhyme { tag, text } ->
-                    let
-                        hoverText : String
-                        hoverText =
-                            "'" ++ text ++ "' is in group " ++ (tag |> getMark) ++ " (rhymes with '" ++ tag ++ ".')"
-                    in
-                        span
-                            [ class "rhyme"
-                            , tag |> getScheme |> toStyleAttribute
-                            , title hoverText
-                            ]
-                            [ Html.text text ]
+                    span
+                        [ class "rhyme"
+                        , toStyleAttribute <| getScheme <| tag
+                        , title <| hoverText tag text
+                        ]
+                        [ Html.text text ]
 
         styledNodes : List (Html a)
         styledNodes =
