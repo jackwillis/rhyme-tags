@@ -1,17 +1,26 @@
 module DocumentView exposing (displayResult)
 
+{-| DocumentView exports `displayResult`, the view function for the output column.
+
+@docs displayResult
+
+-}
+
 import Array exposing (Array, fromList, append, get, length)
 import Char
 import Color exposing (Color, rgb, black, white)
 import Color.Convert as Convert
 import Document exposing (Node(Text, Rhyme), Document, Tag)
+import DocumentParser as Parser
 import Html exposing (Html, div, text, span, ul, li, h3)
 import Html.Attributes exposing (class, style, title)
 import Html.Keyed as Keyed
 import Html.Lazy exposing (lazy)
 
 
-displayResult : Result (List String) Document -> Html a
+{-| Build the view for the result/output column.
+-}
+displayResult : Result (List Parser.Error) Document -> Html a
 displayResult result =
     case result of
         Err errors ->
@@ -21,10 +30,10 @@ displayResult result =
             displayDocument document
 
 
-displayErrors : List String -> Html a
+displayErrors : List Parser.Error -> Html a
 displayErrors errors =
     let
-        displayError : String -> Html a
+        displayError : Parser.Error -> Html a
         displayError err =
             li [] [ text (Basics.toString err) ]
     in
@@ -34,22 +43,40 @@ displayErrors errors =
             ]
 
 
+{-| Returns the *n*th uppercase latin letter.
+
+Expects inputs in range [1, 26].
+
+    ...
+    nthLatinLetter  0 == Nothing
+    nthLatinLetter  1 == Just 'A'
+    nthLatinLetter  2 == Just 'B'
+    ...
+    nthLatinLetter 25 == Just 'Y'
+    nthLatinLetter 26 == Just 'Z'
+    nthLatinLetter 27 == Nothing
+    ...
+
+-}
 nthLatinLetter : Int -> Maybe Char
 nthLatinLetter n =
-    -- Note: 65 = 'A' in Unicode
-    -- Expects input in range [1, 26]
     if 0 < n && n <= 26 then
+        -- Note: 65 = 'A' in Unicode
         Just <| Char.fromCode <| 65 + (n - 1)
     else
         Nothing
 
 
+{-| Converts an integer to another base, as a list of digits.
+Examples using the value 1196:
 
--- digitsInBase 10 1196 == [1, 1, 9, 6]
--- digitsInBase 16 1196 == [4, 10, 12]
--- digitsInBase  2 1196 == [1, 0, 0, 1, 0, 1, 0, 1, 1, 0, 0]
+| *n* | 1196 in base *n* | `digitsInBase n 1196` |
+|-----|------------------|-----------------------------------|
+| 10 | 1192 | [1, 1, 9, 6] |
+| 16 | 0x4ac | [4, 10, 12] |
+| 2 | 0b10010101100 | [1, 0, 0, 1, 0, 1, 0, 1, 1, 0, 0] |
 
-
+-}
 digitsInBase : Int -> Int -> List Int
 digitsInBase base value =
     let
@@ -166,7 +193,7 @@ displayDocument document =
     let
         indexOf : Tag -> Maybe Int
         indexOf =
-            Document.tagIndex document
+            Document.indexOfTag document
 
         getScheme : Tag -> ColorScheme
         getScheme tag =

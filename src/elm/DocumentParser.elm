@@ -1,4 +1,4 @@
-module DocumentParser exposing (parse)
+module DocumentParser exposing (parse, Error)
 
 import Combine exposing (ParseErr, ParseOk, Parser, many, string, end, (<$>), (<|>), (<*), (*>), (<*>))
 import Combine.Char exposing (char, noneOf)
@@ -67,7 +67,11 @@ document =
     Document <$> many (rhyme <|> text)
 
 
-parse : String -> Result (List String) Document
+type alias Error =
+    String
+
+
+parse : String -> Result (List Error) Document
 parse input =
     case (input |> Combine.parse document) of
         Err ( _, _, errors ) ->
