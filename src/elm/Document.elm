@@ -107,8 +107,3 @@ tagIndex document tag =
                 |> Dict.fromList
     in
         Dict.get tag dict
-
-
-maybeEqual : Maybe a -> a -> Bool
-maybeEqual maybe other =
-    maybe |> Maybe.map ((==) other) |> Maybe.withDefault False

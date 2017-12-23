@@ -5,11 +5,13 @@ import Char
 import Color exposing (Color, rgb, black, white)
 import Color.Convert as Convert
 import Document exposing (Node(Text, Rhyme), Document, Tag)
-import Html exposing (Html, div, text, span, ul, li)
+import Html exposing (Html, div, text, span, ul, li, h3)
 import Html.Attributes exposing (class, style, title)
+import Html.Keyed as Keyed
+import Html.Lazy exposing (lazy)
 
 
-displayResult : Result (List String) Document -> List (Html a)
+displayResult : Result (List String) Document -> Html a
 displayResult result =
     case result of
         Err errors ->
@@ -19,16 +21,17 @@ displayResult result =
             displayDocument document
 
 
-displayErrors : List String -> List (Html a)
+displayErrors : List String -> Html a
 displayErrors errors =
     let
         displayError : String -> Html a
         displayError err =
             li [] [ text (Basics.toString err) ]
     in
-        [ text "Errors: "
-        , ul [] (errors |> List.map displayError)
-        ]
+        div []
+            [ h3 [] [ text "Errors:" ]
+            , ul [] (errors |> List.map displayError)
+            ]
 
 
 nthLatinLetter : Int -> Maybe Char
@@ -158,7 +161,7 @@ toStyleAttribute scheme =
         ]
 
 
-displayDocument : Document -> List (Html a)
+displayDocument : Document -> Html a
 displayDocument document =
     let
         indexOf : Tag -> Maybe Int
@@ -197,6 +200,9 @@ displayDocument document =
                             , title hoverText
                             ]
                             [ Html.text text ]
+
+        styledNodes : List (Html a)
+        styledNodes =
+            document.nodes |> List.map (lazy displayNode)
     in
-        document.nodes
-            |> List.map displayNode
+        div [] styledNodes

@@ -87,7 +87,7 @@ view model =
                         []
                     ]
                 , div [ id "output-column" ]
-                    [ div [ id "output" ] (displayResult model.result) ]
+                    [ div [ id "output" ] [ displayResult model.result ] ]
                 ]
             ]
         ]
