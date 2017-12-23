@@ -14,7 +14,6 @@ import Document exposing (Node(Text, Rhyme), Document, Tag)
 import DocumentParser as Parser
 import Html exposing (Html, div, text, span, ul, li, h3)
 import Html.Attributes exposing (class, style, title)
-import Html.Keyed as Keyed
 import Html.Lazy exposing (lazy)
 
 
@@ -70,30 +69,54 @@ nthLatinLetter n =
 {-| Converts an integer to another base, as a list of digits.
 Examples using the value 1196:
 
-| *n* | 1196 in base *n* | `digitsInBase n 1196` |
-|-----|------------------|-----------------------------------|
-| 10 | 1192 | [1, 1, 9, 6] |
-| 16 | 0x4ac | [4, 10, 12] |
-| 2 | 0b10010101100 | [1, 0, 0, 1, 0, 1, 0, 1, 1, 0, 0] |
+    | Some radix *n* | 1196 in base *n* | `digitsInBase n 1196`             |
+    |----------------|------------------|-----------------------------------|
+    | 10             | 1192             | [1, 1, 9, 6]                      |
+    | 16             | 0x4ac            | [4, 10, 12]                       |
+    | 2              | 0b10010101100    | [1, 0, 0, 1, 0, 1, 0, 1, 1, 0, 0] |
+
+Note that this function is unsafe with values over 2^32.
 
 -}
 digitsInBase : Int -> Int -> List Int
 digitsInBase base value =
+    -- Adapted from an example on Rosetta Code.
+    -- I tried to make it a bit more readable (yikes).
     let
-        recur : List Int -> Int -> List Int
-        recur digits value =
+        buildDigits : List Int -> Int -> List Int
+        buildDigits digits value =
             case value of
                 0 ->
                     digits
 
                 _ ->
-                    recur ((value % base) :: digits) (value // base)
+                    let
+                        -- The value without the last digit
+                        div : Int
+                        div =
+                            value // base
+
+                        -- The value's last digit
+                        mod : Int
+                        mod =
+                            value % base
+                    in
+                        buildDigits (mod :: digits) div
     in
-        recur [] value
+        buildDigits [] value
 
 
-removeNothings : List (Maybe a) -> List a
-removeNothings =
+{-| Takes a list of Maybes and returns a list of all the Just values.
+
+    maybeList : List (Maybe Int)
+    maybeList =
+        [ Just 4, Nothing, Just 0, Just 6, Nothing ]
+
+    maybeList |> catMaybes == [ 4, 0, 6 ]
+
+-}
+catMaybes : List (Maybe a) -> List a
+catMaybes =
     List.filterMap identity
 
 
@@ -102,7 +125,7 @@ base26 n =
     (n + 1)
         |> digitsInBase 26
         |> List.map nthLatinLetter
-        |> removeNothings
+        |> catMaybes
         |> String.fromList
 
 

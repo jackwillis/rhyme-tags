@@ -1,9 +1,9 @@
 port module Main exposing (main)
 
 import Array exposing (Array)
-import ExampleData exposing (Example, aLongWalk, allExamples)
+import ExampleData exposing (Example)
 import Document exposing (Document)
-import DocumentParser exposing (parse)
+import DocumentParser as Parser
 import DocumentView exposing (displayResult)
 import Html exposing (..)
 import Html.Attributes exposing (..)
@@ -11,12 +11,17 @@ import Html.Events exposing (on, onInput)
 
 
 type alias Model =
-    { text : String, result : Result (List String) Document }
+    { text : String, result : Result (List Parser.Error) Document }
+
+
+initExample : Example
+initExample =
+    ExampleData.aLongWalk
 
 
 init : ( Model, Cmd Msg )
 init =
-    ( Model aLongWalk.body (parse aLongWalk.body), resizeInput () )
+    ( Model initExample.body (initExample.body |> Parser.parse), resizeInput () )
 
 
 type Msg
@@ -24,7 +29,7 @@ type Msg
     | LoadExample String
 
 
-{-| Make sure the <textarea id="input"> is at least as tall as its contents.
+{-| Make sure the `<textarea id="input">` is at least as tall as its contents.
 -}
 port resizeInput : () -> Cmd a
 
@@ -38,7 +43,7 @@ exampleSelector =
 
         options : List (Html a)
         options =
-            allExamples
+            ExampleData.allExamples
                 |> Array.indexedMap optionFor
                 |> Array.toList
     in
@@ -95,7 +100,7 @@ view model =
 
 updateText : String -> Model -> Model
 updateText text model =
-    { model | text = text, result = parse text }
+    { model | text = text, result = Parser.parse text }
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -110,7 +115,7 @@ update msg model =
                     ( model |> updateText example.body, resizeInput () )
 
                 Nothing ->
-                    ( { model | text = "No such example #" ++ num, result = parse "" }, resizeInput () )
+                    ( { model | text = "No such example #" ++ num, result = Parser.parse "" }, resizeInput () )
 
 
 subscriptions : Model -> Sub Msg

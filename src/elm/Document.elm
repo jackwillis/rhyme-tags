@@ -23,20 +23,20 @@ import Dict exposing (Dict)
 import List.Extra as List
 
 
-{-| Use this type alias to avoid confusion between text and tag string values in `Node`s.
+{-| Use this type alias to avoid confusion between text and tag string values in Nodes.
 -}
 type alias Tag =
     String
 
 
-{-| A `Node` is a segment of a `Document`, capturing data between rhyme boundaries.
+{-| A Node is a segment of a Document, capturing data between rhyme boundaries.
 -}
 type Node
     = Text { text : String }
     | Rhyme { tag : Tag, text : String }
 
 
-{-| This function is equivalent to a `(.text)` that works on `Node`s.
+{-| This function is an accessor for the "text" property of Nodes.
 
     Text  { text = "blue"              } |> getText == "blue"
     Rhyme { text = "blue", tag = "you" } |> getText == "blue"
@@ -52,7 +52,7 @@ getText node =
             text
 
 
-{-| This function is equivalent to a `(.tag)` that works on `Node`s, but is optional.
+{-| This function is an accessor for the optional "tag" property of Nodes.
 
     Text  { text = "blue"              } |> getTag == Nothing
     Rhyme { text = "blue", tag = "you" } |> getTag == Just "you"
