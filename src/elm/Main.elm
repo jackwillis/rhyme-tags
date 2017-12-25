@@ -1,35 +1,46 @@
-port module Main exposing (main)
+module Main exposing (main)
 
 import Array
 import Document exposing (Document)
 import Document.Example as Example exposing (Example)
 import Document.Parser as Parser
-import Document.View exposing (displayResult)
+import Document.View as Document
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (on, onInput)
-
-
-{-| This runs a small bit of Javascript, located in ../static/index.js,
-which ensures the page's input textarea is at least as tall as its contents.
--}
-port resizeInput : () -> Cmd a
+import String.Extra as String
 
 
 type alias Model =
-    { text : String, result : Result (List Parser.Error) Document }
+    { text : String
+    , parseResult : Result (List Parser.Error) Document
+    , inputRows : Int
+    }
 
 
-initExample : Example
-initExample =
-    Example.aLongWalk
+buildModel : String -> Model
+buildModel text =
+    let
+        lineCount =
+            String.countOccurrences "\n" text
+
+        numRows =
+            Basics.max 20 (lineCount + 2)
+    in
+        { text = text
+        , parseResult = text |> Parser.parse
+        , inputRows = numRows
+        }
 
 
 init : ( Model, Cmd Msg )
 init =
-    ( Model initExample.body (initExample.body |> Parser.parse)
-    , resizeInput ()
-    )
+    let
+        initText : String
+        initText =
+            Example.aLongWalk |> .body
+    in
+        ( buildModel initText, Cmd.none )
 
 
 type Msg
@@ -38,7 +49,7 @@ type Msg
 
 
 exampleSelector : (String -> msg) -> Html msg
-exampleSelector msgVariant =
+exampleSelector msgConstructor =
     let
         optionFor : Int -> Example -> Html a
         optionFor n example =
@@ -50,7 +61,7 @@ exampleSelector msgVariant =
                 |> Array.indexedMap optionFor
                 |> Array.toList
     in
-        select [ onInput msgVariant ] options
+        select [ onInput msgConstructor ] options
 
 
 getExample : String -> Maybe Example
@@ -59,6 +70,29 @@ getExample index =
         |> String.toInt
         |> Result.toMaybe
         |> Maybe.andThen (\i -> Array.get i Example.all)
+
+
+displayParseResult : Result (List Parser.Error) Document -> Html a
+displayParseResult result =
+    case result of
+        Err errors ->
+            displayErrors errors
+
+        Ok document ->
+            Document.view document
+
+
+displayErrors : List Parser.Error -> Html a
+displayErrors errors =
+    let
+        displayError : Parser.Error -> Html a
+        displayError error =
+            li [] [ text (error |> toString) ]
+    in
+        div []
+            [ h3 [] [ text "Errors:" ]
+            , ul [] (errors |> List.map displayError)
+            ]
 
 
 view : Model -> Html Msg
@@ -90,49 +124,33 @@ view model =
                     [ textarea
                         [ id "input"
                         , onInput UpdateText
-                        , value model.text
+                        , defaultValue model.text
+                        , rows model.inputRows
                         ]
                         []
                     ]
                 , div [ id "output-column" ]
-                    [ div [ id "output" ] [ displayResult model.result ] ]
+                    [ div [ id "output" ]
+                        [ displayParseResult model.parseResult ]
+                    ]
                 ]
             ]
         ]
-
-
-updateText : String -> Model -> Model
-updateText text model =
-    { model
-        | text = text
-        , result = Parser.parse text
-    }
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
         UpdateText text ->
-            ( model |> updateText text
-            , resizeInput ()
-            )
+            ( buildModel text, Cmd.none )
 
         LoadExample num ->
-            case num |> getExample of
+            case getExample num of
                 Just example ->
-                    ( model |> updateText example.body
-                    , resizeInput ()
-                    )
+                    ( buildModel example.body, Cmd.none )
 
                 Nothing ->
-                    ( model |> updateText ("No such example number: " ++ num)
-                    , resizeInput ()
-                    )
-
-
-subscriptions : Model -> Sub Msg
-subscriptions model =
-    Sub.none
+                    ( buildModel ("No such example number: " ++ num), Cmd.none )
 
 
 main : Program Never Model Msg
@@ -141,5 +159,5 @@ main =
         { init = init
         , view = view
         , update = update
-        , subscriptions = subscriptions
+        , subscriptions = always Sub.none
         }

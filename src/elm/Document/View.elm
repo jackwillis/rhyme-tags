@@ -1,50 +1,20 @@
-module Document.View exposing (displayResult)
+module Document.View exposing (view)
 
-{-| This module contains the view function `displayResult`,
-which builds the contents of the output column,
+{-| This module contains the function `view : Document -> Html a`,
 and its associated helper functions,
 notably all functions related to color.
 
-@docs displayResult
+@docs view
 
 -}
 
-import Array exposing (Array, length)
-import Char
+import Array exposing (Array, length, append)
 import Color exposing (Color, rgb, black, white)
 import Color.Convert as Convert
 import Document exposing (Node(Text, Rhyme), Document, Tag)
-import Document.Parser as Parser
 import Html exposing (Html, div, text, span, ul, li, h3)
 import Html.Attributes exposing (class, style, title)
 import Html.Lazy exposing (lazy)
-
-
-{-| This view generates the contents of the output column.
--}
-displayResult : Result (List Parser.Error) Document -> Html a
-displayResult result =
-    case result of
-        Err errors ->
-            displayErrors errors
-
-        Ok document ->
-            displayDocument document
-
-
-{-| Displays a list of parser errors.
--}
-displayErrors : List Parser.Error -> Html a
-displayErrors errors =
-    let
-        displayError : Parser.Error -> Html a
-        displayError err =
-            li [] [ text (Basics.toString err) ]
-    in
-        div []
-            [ h3 [] [ text "Errors:" ]
-            , ul [] (errors |> List.map displayError)
-            ]
 
 
 type alias ColorScheme =
@@ -102,7 +72,8 @@ colorBrewerPinkYellowGreen =
 allSchemes : Array ColorScheme
 allSchemes =
     colorBrewerPinkYellowGreen
-        |> Array.append tolQualitative
+        |> append tolRainbow
+        |> append tolQualitative
 
 
 defaultScheme : ColorScheme
@@ -129,8 +100,10 @@ toStyleAttribute scheme =
         ]
 
 
-displayDocument : Document -> Html a
-displayDocument document =
+{-| Display a `Document`. Currently there are no configuration options.
+-}
+view : Document -> Html a
+view document =
     let
         indexOf : Tag -> Maybe Int
         indexOf =
@@ -146,19 +119,11 @@ displayDocument document =
         hoverText : Tag -> String -> String
         hoverText tag text =
             let
-                groupName : String
-                groupName =
-                    tag |> indexOf |> Maybe.withDefault 0 |> toString
+                group : Int
+                group =
+                    tag |> indexOf |> Maybe.withDefault 0
             in
-                String.concat
-                    [ "'"
-                    , text
-                    , "' is in group "
-                    , groupName
-                    , " (rhymes with '"
-                    , tag
-                    , ".')"
-                    ]
+                "'" ++ text ++ "' is in group " ++ (group |> toString) ++ " (rhymes with '" ++ tag ++ ".')"
 
         displayNode : Node -> Html a
         displayNode node =
