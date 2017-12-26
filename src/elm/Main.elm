@@ -7,7 +7,8 @@ import Document.Parser as Parser
 import Document.View as Document
 import Html exposing (..)
 import Html.Attributes exposing (..)
-import Html.Events exposing (on, onInput)
+import Html.Events exposing (on, onInput, onClick)
+import Json.Decode as Json
 import String.Extra as String
 
 
@@ -15,11 +16,12 @@ type alias Model =
     { text : String
     , parseResult : Result (List Parser.Error) Document
     , inputRows : Int
+    , selectedExample : Maybe Int
     }
 
 
-buildModel : String -> Model
-buildModel text =
+setText : String -> Model -> Model
+setText text model =
     let
         lineCount =
             String.countOccurrences "\n" text
@@ -27,29 +29,39 @@ buildModel text =
         numRows =
             Basics.max 20 (lineCount + 2)
     in
-        { text = text
-        , parseResult = text |> Parser.parse
-        , inputRows = numRows
+        { model
+            | text = text
+            , parseResult = text |> Parser.parse
+            , inputRows = numRows
         }
+
+
+blankModel : Model
+blankModel =
+    { text = ""
+    , parseResult = Ok (Document [])
+    , inputRows = 2
+    , selectedExample = Just 0
+    }
 
 
 init : ( Model, Cmd Msg )
 init =
     let
-        initText : String
         initText =
             Example.aLongWalk |> .body
     in
-        ( buildModel initText, Cmd.none )
+        ( blankModel |> setText initText, Cmd.none )
 
 
 type Msg
     = UpdateText String
-    | LoadExample String
+    | SelectExample (Maybe Int)
+    | LoadExample
 
 
-exampleSelector : (String -> msg) -> Html msg
-exampleSelector msgConstructor =
+exampleSelector : (Maybe Int -> msg) -> Html msg
+exampleSelector tagger =
     let
         optionFor : Int -> Example -> Html a
         optionFor n example =
@@ -60,16 +72,15 @@ exampleSelector msgConstructor =
             Example.all
                 |> Array.indexedMap optionFor
                 |> Array.toList
+
+        decoder : Json.Decoder msg
+        decoder =
+            Html.Events.targetValue
+                |> Json.map String.toInt
+                |> Json.map Result.toMaybe
+                |> Json.map tagger
     in
-        select [ onInput msgConstructor ] options
-
-
-getExample : String -> Maybe Example
-getExample index =
-    index
-        |> String.toInt
-        |> Result.toMaybe
-        |> Maybe.andThen (\i -> Array.get i Example.all)
+        select [ on "input" decoder ] options
 
 
 displayParseResult : Result (List Parser.Error) Document -> Html a
@@ -105,7 +116,8 @@ view model =
         , div [ id "columns" ]
             [ div [ id "control-column" ]
                 [ h2 [] [ text "examples" ]
-                , exampleSelector LoadExample
+                , exampleSelector SelectExample
+                , button [ onClick LoadExample ] [ text "Load" ]
                 , h2 [] [ text "help" ]
                 , p []
                     [ text "usage information and source code is available on the "
@@ -142,15 +154,24 @@ update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
         UpdateText text ->
-            ( buildModel text, Cmd.none )
+            ( model |> setText text, Cmd.none )
 
-        LoadExample num ->
-            case getExample num of
-                Just example ->
-                    ( buildModel example.body, Cmd.none )
+        SelectExample num ->
+            ( { model | selectedExample = num }, Cmd.none )
 
-                Nothing ->
-                    ( buildModel ("No such example number: " ++ num), Cmd.none )
+        LoadExample ->
+            let
+                maybeExample : Maybe Example
+                maybeExample =
+                    model.selectedExample
+                        |> Maybe.andThen (\num -> Example.all |> Array.get num)
+            in
+                case maybeExample of
+                    Just example ->
+                        ( model |> setText example.body, Cmd.none )
+
+                    Nothing ->
+                        ( model |> setText "Unable to load example.", Cmd.none )
 
 
 main : Program Never Model Msg
