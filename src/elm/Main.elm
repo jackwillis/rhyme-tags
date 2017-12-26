@@ -124,7 +124,7 @@ view model =
                     [ textarea
                         [ id "input"
                         , onInput UpdateText
-                        , defaultValue model.text
+                        , value model.text
                         , rows model.inputRows
                         ]
                         []

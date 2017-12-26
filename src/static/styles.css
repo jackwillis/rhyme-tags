@@ -62,12 +62,13 @@ h1 {
 }
 
 #input {
-    border: 2px solid black;
+    border: 2px solid gray;
     outline: 0;
     box-sizing: border-box;
 
     margin: 0;
     padding: calc(1em - 2px) 1em;
+
     overflow-x: auto;
 }
 
