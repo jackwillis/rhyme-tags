@@ -101,7 +101,7 @@ select {
 
 #output .rhyme {
     font-weight: bold;
-    padding: 0.0625em 0.125em;
+    padding: 0.0625em;
 }
 
 #output .mark {

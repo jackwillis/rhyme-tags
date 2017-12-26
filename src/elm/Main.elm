@@ -20,6 +20,15 @@ type alias Model =
     }
 
 
+blankModel : Model
+blankModel =
+    { text = ""
+    , parseResult = Ok (Document [])
+    , inputRows = 2
+    , selectedExample = Nothing
+    }
+
+
 setText : String -> Model -> Model
 setText text model =
     let
@@ -34,15 +43,6 @@ setText text model =
             , parseResult = text |> Parser.parse
             , inputRows = numRows
         }
-
-
-blankModel : Model
-blankModel =
-    { text = ""
-    , parseResult = Ok (Document [])
-    , inputRows = 2
-    , selectedExample = Just 0
-    }
 
 
 init : ( Model, Cmd Msg )
@@ -80,7 +80,7 @@ exampleSelector tagger =
                 |> Json.map Result.toMaybe
                 |> Json.map tagger
     in
-        select [ on "input" decoder ] options
+        select [ on "change" decoder ] options
 
 
 displayParseResult : Result (List Parser.Error) Document -> Html a
