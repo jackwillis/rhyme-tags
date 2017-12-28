@@ -1,6 +1,7 @@
 module Main exposing (main)
 
 import Array
+import Dialog
 import Document exposing (Document)
 import Document.Example as Example exposing (Example)
 import Document.Parser as Parser
@@ -17,6 +18,7 @@ type alias Model =
     , parseResult : Result (List Parser.Error) Document
     , inputRows : Int
     , selectedExample : Maybe Int
+    , showHelpDialog : Bool
     }
 
 
@@ -26,6 +28,7 @@ blankModel =
     , parseResult = Ok (Document [])
     , inputRows = 2
     , selectedExample = Just 0
+    , showHelpDialog = True
     }
 
 
@@ -59,6 +62,8 @@ type Msg
     = UpdateText String
     | SelectExample (Maybe Int)
     | LoadExample
+    | OpenHelpDialog
+    | CloseHelpDialog
 
 
 exampleSelector : (Maybe Int -> msg) -> Html msg
@@ -107,6 +112,25 @@ displayErrors errors =
             ]
 
 
+helpDialog : Model -> Html Msg
+helpDialog model =
+    let
+        config =
+            { closeMessage = Just CloseHelpDialog
+            , containerClass = Nothing
+            , header = Just (h3 [] [ text "Help" ])
+            , body = Just (text ("gfdfgd."))
+            , footer = Just (text "Dd")
+            }
+    in
+        Dialog.view
+            (if model.showHelpDialog then
+                Just config
+             else
+                Nothing
+            )
+
+
 view : Model -> Html Msg
 view model =
     div [ id "wrapper" ]
@@ -130,6 +154,7 @@ view model =
                     [ displayParseResult model.parseResult ]
                 ]
             ]
+        , model |> helpDialog
         ]
 
 
@@ -155,6 +180,12 @@ update msg model =
 
                     Nothing ->
                         ( model |> setText "Unable to load example.", Cmd.none )
+
+        OpenHelpDialog ->
+            ( { model | showHelpDialog = True }, Cmd.none )
+
+        CloseHelpDialog ->
+            ( { model | showHelpDialog = False }, Cmd.none )
 
 
 main : Program Never Model Msg

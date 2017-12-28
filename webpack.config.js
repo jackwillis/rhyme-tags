@@ -18,13 +18,15 @@ const defaultConfig = {
         modules: ["node_modules"]
     },
     module: {
-      rules: [{
-          test: /\.css$/,
-          use: ExtractTextPlugin.extract({
-              fallback: "style-loader",
-              use: "css-loader"
-          })
-      }]
+        rules: [
+            {
+                test: /\.less$/,
+                use: ExtractTextPlugin.extract({
+                    fallback: "style-loader",
+                    use: ["css-loader", "less-loader"]
+                })
+            }
+        ]
     },
     plugins: [
         new ExtractTextPlugin("bundle.css")
