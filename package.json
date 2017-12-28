@@ -1,6 +1,6 @@
 {
   "name": "rhyme-tags",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "web-based rhyme visualization tool",
   "repository": "https://github.com/jackwillis/rhyme-tags",
   "dependencies": {
