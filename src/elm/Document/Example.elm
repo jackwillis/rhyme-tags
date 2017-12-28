@@ -322,8 +322,8 @@ rhyme-tags is a tool for visualizing the structure of rhyming poetry.
 You may edit the source of this document, on the left side.
 Any changes to the source will update the view, on the right side.
 
-Rhyme annotations in the document's source
-are used to color-code matching rhymes in the view.
+The rhyme data in the document's source, denoted by braces and colons,
+are used in the view to color-code matching rhymes.
 
 For example, below is an excerpt from The Coup's "Fat Cats, Bigga Fish:"
 
