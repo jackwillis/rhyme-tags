@@ -315,8 +315,7 @@ helpText =
     <|
         String.trim """
 
-Hello. Welcome to rhyme-tags.
-
+Hello. Welcome to the rhyme-tags example document.
 rhyme-tags is a tool for visualizing the structure of rhyming poetry.
 
 You may edit the source of this document, on the left side.
