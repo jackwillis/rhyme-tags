@@ -12,7 +12,7 @@ p, h2 {
     margin: 0.5em 0;
 }
 
-header, #columns > * {
+header {
     padding: 0 0.5em;
 }
 
@@ -28,12 +28,15 @@ header {
 h1 {
     position: relative;
     font-size: 150%;
-    top: 0.25em;
+    top: 0.125em;
 }
 
 #columns {
-    padding: 0.5em 0;
-    height: calc(100% - 4em);
+    width: 100%;
+    height: calc(100% - 3em);
+
+    overflow-x: hidden;
+    overflow-y: auto;
 
     display: flex;
     flex-direction: row;
@@ -41,26 +44,13 @@ h1 {
     justify-content: space-evenly;
 }
 
-#data-columns {
-    height: 100%;
-    overflow: auto;
-
-    flex-grow: 1;
-    min-width: 15em;
-    max-width: calc(100% - 9.5em);
-
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-}
-
 #input-column, #output-column {
-    width: 50%;
+    width: calc(50% - 1em);
 }
 
 #output, #input {
     white-space: pre;
-    width: calc(100% - 1.5em);
+    width: 100%;
 }
 
 #input {
@@ -81,25 +71,6 @@ h1 {
 
 #output {
     padding: 1em;
-}
-
-
-select {
-    margin: 0.5em 0;
-    padding: 0.125em;
-}
-
-#control-column {
-    width: 9em;
-    padding-right: 1em;
-}
-
-#control-column > h2:first-child {
-    margin-top: 0;
-}
-
-#control-column select {
-    width: 100%;
 }
 
 #output .rhyme {

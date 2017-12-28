@@ -115,38 +115,19 @@ view model =
                 [ text "rhyme-tags" ]
             ]
         , div [ id "columns" ]
-            [ div [ id "control-column" ]
-                [ h2 [] [ text "examples" ]
-                , exampleSelector SelectExample
-                , button [ onClick LoadExample ] [ text "Load" ]
-                , h2 [] [ text "help" ]
-                , p []
-                    [ text "usage information and source code is available on the "
-                    , a [ href "https://github.com/jackwillis/rhyme-tags" ] [ text "project website" ]
-                    , text "."
+            [ div [ id "input-column" ]
+                [ textarea
+                    [ id "input"
+                    , onInput UpdateText
+                    , value model.text
+                    , rows model.inputRows
+                    , autocomplete False
                     ]
-                , h2 [] [ text "about" ]
-                , p []
-                    [ text "rhyme-tags is free software released under the GNU "
-                    , a [ href "https://www.gnu.org/licenses/gpl-3.0.en.html" ] [ text "General Public License" ]
-                    , text ", version 3."
-                    ]
+                    []
                 ]
-            , div [ id "data-columns" ]
-                [ div [ id "input-column" ]
-                    [ textarea
-                        [ id "input"
-                        , onInput UpdateText
-                        , value model.text
-                        , rows model.inputRows
-                        , autocomplete False
-                        ]
-                        []
-                    ]
-                , div [ id "output-column" ]
-                    [ div [ id "output" ]
-                        [ displayParseResult model.parseResult ]
-                    ]
+            , div [ id "output-column" ]
+                [ div [ id "output" ]
+                    [ displayParseResult model.parseResult ]
                 ]
             ]
         ]
