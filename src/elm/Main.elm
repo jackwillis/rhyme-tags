@@ -25,7 +25,7 @@ blankModel =
     { text = ""
     , parseResult = Ok (Document [])
     , inputRows = 2
-    , selectedExample = Nothing
+    , selectedExample = Just 0
     }
 
 
@@ -45,13 +45,14 @@ setText text model =
         }
 
 
+initText : String
+initText =
+    Example.helpText |> .body
+
+
 init : ( Model, Cmd Msg )
 init =
-    let
-        initText =
-            Example.aLongWalk |> .body
-    in
-        ( blankModel |> setText initText, Cmd.none )
+    ( blankModel |> setText initText, Cmd.none )
 
 
 type Msg
@@ -138,6 +139,7 @@ view model =
                         , onInput UpdateText
                         , value model.text
                         , rows model.inputRows
+                        , autocomplete False
                         ]
                         []
                     ]

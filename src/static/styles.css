@@ -7,6 +7,7 @@ body, h1 {
     padding: 0;
 }
 
+
 p, h2 {
     margin: 0.5em 0;
 }
@@ -26,7 +27,8 @@ header {
 
 h1 {
     position: relative;
-    top: 0.125em;
+    font-size: 150%;
+    top: 0.25em;
 }
 
 #columns {
@@ -62,12 +64,13 @@ h1 {
 }
 
 #input {
-    border: 2px solid gray;
+    border: 1px solid gray;
     outline: 0;
     box-sizing: border-box;
+    resize: none;
 
     margin: 0;
-    padding: calc(1em - 2px) 1em;
+    padding: calc(1em - 1px) 1em;
 
     overflow-x: auto;
 }

@@ -308,6 +308,40 @@ They won't know what route I'm { going: on }
     """
 
 
+helpText : Example
+helpText =
+    Example
+        "(Help text)"
+    <|
+        String.trim """
+
+Hello. Welcome to rhyme-tags.
+
+rhyme-tags is a tool for visualizing the structure of rhyming poetry.
+
+You may edit the source of this document, on the left side.
+Any changes to the source will update the view, on the right side.
+
+Rhyme annotations in the document's source
+are used to color-code matching rhymes in the view.
+
+For example, below is an excerpt from The Coup's "Fat Cats, Bigga Fish:"
+
+\t It's almost 10 o'clock, see, I got a ball of lint for { property: }
+\t So I slip my beanie on { sloppily: property }
+\t And promenade out to take up a { collection: }
+\t I got game like I read the { directions: collection }
+\t I'm wishing that I had an auto{ mobile: }
+\t As I feel the cold wind { rush past: }
+\t But let me state that I'm a hustler { for real: mobile }
+\t So you know I got the stolen { bus pass: rush past }
+
+You may load more examples from the drop-down menu on the left,
+or read the documentation in the link under the "help" header.
+
+    """
+
+
 all : Array Example
 all =
-    Array.fromList [ aLongWalk, freightTrain, harlemSweeties, realityPoem, thingsYouCanDo ]
+    Array.fromList [ aLongWalk, freightTrain, harlemSweeties, realityPoem, thingsYouCanDo, helpText ]
