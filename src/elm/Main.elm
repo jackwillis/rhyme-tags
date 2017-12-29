@@ -20,7 +20,6 @@ type alias Model =
     { text : String
     , parseResult : Result (List Parser.Error) Document
     , inputRows : Int
-    , selectedExample : Int
     , openDialog : DialogState
     }
 
@@ -30,7 +29,6 @@ blankModel =
     { text = ""
     , parseResult = Ok (Document [])
     , inputRows = 20
-    , selectedExample = 0
     , openDialog = NoDialog
     }
 
@@ -67,8 +65,7 @@ init =
 
 type Msg
     = UpdateText String
-    | SelectExample Int
-    | LoadExample
+    | LoadExample Int
     | OpenDialog DialogState
     | NoOp
 
@@ -125,18 +122,21 @@ exampleSelector =
                                 NoOp
 
                             Ok num ->
-                                SelectExample num
+                                LoadExample num
                     )
+
+        -- This is a hack until I get it working with a Bootstrap dropdown, or something
+        placeholderOption : Html a
+        placeholderOption =
+            option
+                [ value ""
+                , selected True
+                , disabled True
+                , hidden True
+                ]
+                [ text "Select an example" ]
     in
-        select [ on "change" decoder ] options
-
-
-loadBody : Html Msg
-loadBody =
-    div []
-        [ exampleSelector
-        , button [ class "btn btn-info", onClick LoadExample ] [ text "Load example" ]
-        ]
+        select [ on "change" decoder ] (placeholderOption :: options)
 
 
 helpBody : Html a
@@ -174,7 +174,7 @@ viewDialog dialog =
                 Just
                     { defaultConfig
                         | header = Just <| h3 [] [ text "Load examples" ]
-                        , body = Just loadBody
+                        , body = Just exampleSelector
                     }
 
             HelpDialog ->
@@ -265,16 +265,18 @@ update msg model =
         UpdateText text ->
             ( model |> setText text, Cmd.none )
 
-        SelectExample num ->
-            ( { model | selectedExample = num }, Cmd.none )
+        LoadExample num ->
+            let
+                maybeExample : Maybe Example
+                maybeExample =
+                    Array.get num Example.all
+            in
+                case maybeExample of
+                    Just example ->
+                        ( model |> setText example.body, Cmd.none )
 
-        LoadExample ->
-            case Array.get model.selectedExample Example.all of
-                Just example ->
-                    ( model |> setText example.body, Cmd.none )
-
-                Nothing ->
-                    ( model |> setText "Unable to load example.", Cmd.none )
+                    Nothing ->
+                        ( model |> setText "Unable to load example.", Cmd.none )
 
         OpenDialog dialog ->
             ( { model | openDialog = dialog }, Cmd.none )

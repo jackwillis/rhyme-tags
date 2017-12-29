@@ -343,4 +343,4 @@ or read the documentation in the link under the "help" header.
 
 all : Array Example
 all =
-    Array.fromList [ aLongWalk, freightTrain, harlemSweeties, realityPoem, thingsYouCanDo, helpText ]
+    Array.fromList [ helpText, aLongWalk, freightTrain, harlemSweeties, realityPoem, thingsYouCanDo ]
