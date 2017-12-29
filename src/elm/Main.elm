@@ -15,6 +15,8 @@ import String.Extra as String
 
 type DialogState
     = NoDialog
+    | LoadDialog
+    | AboutDialog
     | HelpDialog
 
 
@@ -23,7 +25,7 @@ type alias Model =
     , parseResult : Result (List Parser.Error) Document
     , inputRows : Int
     , selectedExample : Maybe Int
-    , currentDialog : DialogState
+    , openDialog : DialogState
     }
 
 
@@ -31,9 +33,9 @@ blankModel : Model
 blankModel =
     { text = ""
     , parseResult = Ok (Document [])
-    , inputRows = 2
-    , selectedExample = Just 0
-    , currentDialog = NoDialog
+    , inputRows = 20
+    , selectedExample = Nothing
+    , openDialog = NoDialog
     }
 
 
@@ -67,7 +69,7 @@ type Msg
     = UpdateText String
     | SelectExample (Maybe Int)
     | LoadExample
-    | SetDialog DialogState
+    | SetOpenDialog DialogState
 
 
 exampleSelector : (Maybe Int -> msg) -> Html msg
@@ -93,6 +95,16 @@ exampleSelector tagger =
         select [ on "change" decoder ] options
 
 
+loadExample : Maybe Int -> Maybe Example
+loadExample selectedExample =
+    case selectedExample of
+        Just index ->
+            Array.get index Example.all
+
+        Nothing ->
+            Nothing
+
+
 displayParseResult : Result (List Parser.Error) Document -> Html a
 displayParseResult result =
     case result of
@@ -116,13 +128,17 @@ displayErrors errors =
             ]
 
 
-helpDialog : Dialog.Config Msg
-helpDialog =
-    { closeMessage = Just (SetDialog NoDialog)
+defaultDialog : Dialog.Config Msg
+defaultDialog =
+    { closeMessage = Just (SetOpenDialog NoDialog)
     , containerClass = Nothing
-    , header = Just (h3 [] [ text "Help for rhyme-tags" ])
-    , body = Just (text ("gfdfgd."))
-    , footer = Just (button [ class "btn btn-info", onClick (SetDialog NoDialog) ] [ text "Close" ])
+    , header = Nothing
+    , body = Nothing
+    , footer =
+        Just <|
+            button
+                [ class "btn btn-info", onClick (SetOpenDialog NoDialog) ]
+                [ text "Close" ]
     }
 
 
@@ -130,11 +146,45 @@ displayDialog : DialogState -> Html Msg
 displayDialog openDialog =
     Dialog.view <|
         case openDialog of
+            LoadDialog ->
+                Nothing
+
             HelpDialog ->
-                Just helpDialog
+                Just
+                    { defaultDialog
+                        | header = Just <| h3 [] [ text "Help" ]
+                        , body = Just <| help
+                    }
+
+            AboutDialog ->
+                Just
+                    { defaultDialog
+                        | header = Just <| h3 [] [ text "About rhyme-tags" ]
+                        , body = Just <| about
+                    }
 
             NoDialog ->
                 Nothing
+
+
+help : Html a
+help =
+    p []
+        [ text "Usage information and source code is available on the "
+        , a [ href "https://github.com/jackwillis/rhyme-tags" ]
+            [ text "project website" ]
+        , text "."
+        ]
+
+
+about : Html a
+about =
+    p []
+        [ text "rhyme-tags is free software released under the GNU "
+        , a [ href "https://www.gnu.org/licenses/gpl-3.0.en.html" ]
+            [ text "General Public License" ]
+        , text ", version 3."
+        ]
 
 
 view : Model -> Html Msg
@@ -142,9 +192,9 @@ view model =
     div [ id "wrapper" ]
         [ header []
             [ h1 [] [ text "rhyme-tags" ]
-            , button [ class "btn", onClick (SetDialog HelpDialog) ] [ text "load" ]
-            , button [ class "btn", onClick (SetDialog HelpDialog) ] [ text "help" ]
-            , button [ class "btn", onClick (SetDialog HelpDialog) ] [ text "about" ]
+            , button [ class "btn", onClick (SetOpenDialog LoadDialog) ] [ text "load" ]
+            , button [ class "btn", onClick (SetOpenDialog HelpDialog) ] [ text "help" ]
+            , button [ class "btn", onClick (SetOpenDialog AboutDialog) ] [ text "about" ]
             ]
         , div [ id "columns" ]
             [ div [ id "input-column" ]
@@ -162,7 +212,7 @@ view model =
                     [ displayParseResult model.parseResult ]
                 ]
             ]
-        , displayDialog model.currentDialog
+        , displayDialog model.openDialog
         ]
 
 
@@ -176,21 +226,15 @@ update msg model =
             ( { model | selectedExample = num }, Cmd.none )
 
         LoadExample ->
-            let
-                maybeExample : Maybe Example
-                maybeExample =
-                    model.selectedExample
-                        |> Maybe.andThen (\num -> Example.all |> Array.get num)
-            in
-                case maybeExample of
-                    Just example ->
-                        ( model |> setText example.body, Cmd.none )
+            case loadExample model.selectedExample of
+                Just example ->
+                    ( model |> setText example.body, Cmd.none )
 
-                    Nothing ->
-                        ( model |> setText "Unable to load example.", Cmd.none )
+                Nothing ->
+                    ( model |> setText "Unable to load example.", Cmd.none )
 
-        SetDialog dialogState ->
-            ( { model | currentDialog = dialogState }, Cmd.none )
+        SetOpenDialog dialog ->
+            ( { model | openDialog = dialog }, Cmd.none )
 
 
 main : Program Never Model Msg
