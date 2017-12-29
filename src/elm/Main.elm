@@ -13,12 +13,17 @@ import Json.Decode as Json
 import String.Extra as String
 
 
+type DialogState
+    = NoDialog
+    | HelpDialog
+
+
 type alias Model =
     { text : String
     , parseResult : Result (List Parser.Error) Document
     , inputRows : Int
     , selectedExample : Maybe Int
-    , showHelpDialog : Bool
+    , currentDialog : DialogState
     }
 
 
@@ -28,7 +33,7 @@ blankModel =
     , parseResult = Ok (Document [])
     , inputRows = 2
     , selectedExample = Just 0
-    , showHelpDialog = True
+    , currentDialog = NoDialog
     }
 
 
@@ -62,8 +67,7 @@ type Msg
     = UpdateText String
     | SelectExample (Maybe Int)
     | LoadExample
-    | OpenHelpDialog
-    | CloseHelpDialog
+    | SetDialog DialogState
 
 
 exampleSelector : (Maybe Int -> msg) -> Html msg
@@ -112,31 +116,35 @@ displayErrors errors =
             ]
 
 
-helpDialog : Model -> Html Msg
-helpDialog model =
-    let
-        config =
-            { closeMessage = Just CloseHelpDialog
-            , containerClass = Nothing
-            , header = Just (h3 [] [ text "Help" ])
-            , body = Just (text ("gfdfgd."))
-            , footer = Just (text "Dd")
-            }
-    in
-        Dialog.view
-            (if model.showHelpDialog then
-                Just config
-             else
+helpDialog : Dialog.Config Msg
+helpDialog =
+    { closeMessage = Just (SetDialog NoDialog)
+    , containerClass = Nothing
+    , header = Just (h3 [] [ text "Help for rhyme-tags" ])
+    , body = Just (text ("gfdfgd."))
+    , footer = Just (button [ class "btn btn-info", onClick (SetDialog NoDialog) ] [ text "Close" ])
+    }
+
+
+displayDialog : DialogState -> Html Msg
+displayDialog openDialog =
+    Dialog.view <|
+        case openDialog of
+            HelpDialog ->
+                Just helpDialog
+
+            NoDialog ->
                 Nothing
-            )
 
 
 view : Model -> Html Msg
 view model =
     div [ id "wrapper" ]
         [ header []
-            [ h1 []
-                [ text "rhyme-tags" ]
+            [ h1 [] [ text "rhyme-tags" ]
+            , button [ class "btn", onClick (SetDialog HelpDialog) ] [ text "load" ]
+            , button [ class "btn", onClick (SetDialog HelpDialog) ] [ text "help" ]
+            , button [ class "btn", onClick (SetDialog HelpDialog) ] [ text "about" ]
             ]
         , div [ id "columns" ]
             [ div [ id "input-column" ]
@@ -154,7 +162,7 @@ view model =
                     [ displayParseResult model.parseResult ]
                 ]
             ]
-        , model |> helpDialog
+        , displayDialog model.currentDialog
         ]
 
 
@@ -181,11 +189,8 @@ update msg model =
                     Nothing ->
                         ( model |> setText "Unable to load example.", Cmd.none )
 
-        OpenHelpDialog ->
-            ( { model | showHelpDialog = True }, Cmd.none )
-
-        CloseHelpDialog ->
-            ( { model | showHelpDialog = False }, Cmd.none )
+        SetDialog dialogState ->
+            ( { model | currentDialog = dialogState }, Cmd.none )
 
 
 main : Program Never Model Msg

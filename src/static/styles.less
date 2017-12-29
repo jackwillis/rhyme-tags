@@ -5,7 +5,7 @@ body, select, textarea {
     font: 12pt/19pt sans-serif;
 }
 
-body, h1 {
+body {
     margin: 0;
     padding: 0;
 }
@@ -16,22 +16,22 @@ p, h2 {
 }
 
 header {
-    padding: 0 0.5em;
-}
-
-html, body, #elm, #wrapper, #columns > * {
-    height: 100%;
-}
-
-header {
     height: 2em;
     padding: 0.5em;
-}
 
-h1 {
-    position: relative;
-    font-size: 150%;
-    top: 0.125em;
+    h1 {
+        position: relative;
+        font-size: 150%;
+        top: 0.125em;
+
+        display: inline-block;
+
+        margin-right: 0.5em;
+    }
+
+    button {
+        margin: 0 0.25em;
+    }
 }
 
 #columns {
@@ -63,7 +63,7 @@ h1 {
     resize: none;
 
     margin: 0;
-    padding: calc(1em - 1px) 1em;
+    padding: 1em;
 
     overflow-x: auto;
 }
