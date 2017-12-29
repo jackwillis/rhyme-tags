@@ -179,11 +179,18 @@ help =
 
 about : Html a
 about =
-    p []
-        [ text "rhyme-tags is free software released under the GNU "
-        , a [ href "https://www.gnu.org/licenses/gpl-3.0.en.html" ]
-            [ text "General Public License" ]
-        , text ", version 3."
+    div []
+        [ p []
+            [ text "rhyme-tags version "
+            , a [ href "https://github.com/jackwillis/rhyme-tags/releases/tag/v0.1.5" ]
+                [ text "0.1.5" ]
+            , text "."
+            ]
+        , p []
+            [ text "This is free software: you can redistribute it and/or modify it under the terms of the "
+            , a [ href "https://www.gnu.org/licenses/gpl-3.0.html" ] [ text "GNU General Public License" ]
+            , text " as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version."
+            ]
         ]
 
 
