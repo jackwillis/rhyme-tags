@@ -1,10 +1,21 @@
-module Document.Example exposing (..)
+module Examples
+    exposing
+        ( Example
+        , thingsYouCanDo
+        , harlemSweeties
+        , realityPoem
+        , freightTrain
+        , helpText
+        , all
+        )
 
 import Array exposing (Array)
 
 
 type alias Example =
-    { title : String, body : String }
+    { title : String
+    , body : String
+    }
 
 
 thingsYouCanDo : Example

@@ -3,7 +3,7 @@ module Main exposing (main)
 import Array
 import Dialog
 import Document exposing (Document)
-import Document.Example as Example exposing (Example)
+import Examples exposing (Example)
 import Document.Parser as Parser
 import Document.View as Document
 import Html exposing (..)
@@ -58,7 +58,7 @@ setText text model =
 
 init : ( Model, Cmd Msg )
 init =
-    ( blankModel |> setText (.body Example.helpText), Cmd.none )
+    ( blankModel |> setText (.body Examples.helpText), Cmd.none )
 
 
 
@@ -109,7 +109,7 @@ exampleSelector =
 
         exampleOptions : List (Html a)
         exampleOptions =
-            Example.all
+            Examples.all
                 |> Array.indexedMap optionFor
                 |> Array.toList
 
@@ -271,7 +271,7 @@ update msg model =
             let
                 maybeExample : Maybe Example
                 maybeExample =
-                    Array.get num Example.all
+                    Array.get num Examples.all
             in
                 case maybeExample of
                     Just example ->
