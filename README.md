@@ -35,10 +35,6 @@ as is done above.
 
 ## Compiling from source
 
-rhyme-tags is distributed under the terms of the
-GNU General Public License, version 3.0.
-See [COPYING.md](COPYING.md).
-
 rhyme-tags is intended to be built on Linux.
 If you are using Windows 10, you may want to use the
 Windows Subsystem for Linux
@@ -69,3 +65,20 @@ To build the project into `dist/index.html`, run:
 To start the development server on `http://localhost:8080`, run:
 
     $ npm start
+
+## License
+
+Copyright © 2017 Jackson Willis.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the [GNU General Public License](COPYING.md)
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
