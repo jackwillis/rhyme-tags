@@ -17,10 +17,17 @@ import String.Extra as String
 
 
 type alias Model =
-    { text : String
+    { -- Data from the left column (editor)
+      text : String
+
+    -- Height of editor in rows
+    , editorHeight : Int
+
+    -- Data for the right column (view)
     , parseResult : Result (List Parser.Error) Document
-    , inputRows : Int
-    , openDialog : DialogState
+
+    -- Currently open dialog box, if any
+    , dialog : DialogState
     }
 
 
@@ -28,8 +35,8 @@ blankModel : Model
 blankModel =
     { text = ""
     , parseResult = Ok (Document [])
-    , inputRows = 20
-    , openDialog = NoDialog
+    , editorHeight = 20
+    , dialog = NoDialog
     }
 
 
@@ -39,24 +46,19 @@ setText text model =
         lineCount =
             String.countOccurrences "\n" text
 
-        numRows =
+        editorHeight =
             Basics.max 20 (lineCount + 2)
     in
         { model
             | text = text
-            , parseResult = text |> Parser.parse
-            , inputRows = numRows
+            , parseResult = Parser.parse text
+            , editorHeight = editorHeight
         }
-
-
-initText : String
-initText =
-    Example.helpText |> .body
 
 
 init : ( Model, Cmd Msg )
 init =
-    ( blankModel |> setText initText, Cmd.none )
+    ( blankModel |> setText (.body Example.helpText), Cmd.none )
 
 
 
@@ -105,8 +107,8 @@ exampleSelector =
         optionFor n example =
             option [ value (toString n) ] [ text example.title ]
 
-        options : List (Html a)
-        options =
+        exampleOptions : List (Html a)
+        exampleOptions =
             Example.all
                 |> Array.indexedMap optionFor
                 |> Array.toList
@@ -136,7 +138,7 @@ exampleSelector =
                 ]
                 [ text "Select an example" ]
     in
-        select [ on "change" decoder ] (placeholderOption :: options)
+        select [ on "change" decoder ] (placeholderOption :: exampleOptions)
 
 
 helpBody : Html a
@@ -199,18 +201,18 @@ viewDialog dialog =
 -- VIEW HELPERS
 
 
-displayParseResult : Result (List Parser.Error) Document -> Html a
-displayParseResult result =
+viewParseResult : Result (List Parser.Error) Document -> Html a
+viewParseResult result =
     case result of
         Err errors ->
-            displayErrors errors
+            viewErrors errors
 
         Ok document ->
             Document.view document
 
 
-displayErrors : List Parser.Error -> Html a
-displayErrors errors =
+viewErrors : List Parser.Error -> Html a
+viewErrors errors =
     let
         displayError : Parser.Error -> Html a
         displayError error =
@@ -241,17 +243,17 @@ view model =
                     [ id "input"
                     , onInput UpdateText
                     , value model.text
-                    , rows model.inputRows
+                    , rows model.editorHeight
                     , autocomplete False
                     ]
                     []
                 ]
             , div [ id "output-column" ]
                 [ div [ id "output" ]
-                    [ displayParseResult model.parseResult ]
+                    [ viewParseResult model.parseResult ]
                 ]
             ]
-        , viewDialog model.openDialog
+        , viewDialog model.dialog
         ]
 
 
@@ -279,7 +281,7 @@ update msg model =
                         ( model |> setText "Unable to load example.", Cmd.none )
 
         OpenDialog dialog ->
-            ( { model | openDialog = dialog }, Cmd.none )
+            ( { model | dialog = dialog }, Cmd.none )
 
         NoOp ->
             ( model, Cmd.none )
