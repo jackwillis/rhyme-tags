@@ -17,48 +17,30 @@ import String.Extra as String
 
 
 type alias Model =
-    { -- Data from the left column (editor)
+    { -- Value of the left column (editor)
       text : String
-
-    -- Height of editor in rows
-    , editorHeight : Int
-
-    -- Data for the right column (view)
-    , parseResult : Result (List Parser.Error) Document
 
     -- Currently open dialog box, if any
     , dialog : DialogState
     }
 
 
-blankModel : Model
-blankModel =
-    { text = ""
-    , parseResult = Ok (Document [])
-    , editorHeight = 20
-    , dialog = NoDialog
-    }
-
-
-setText : String -> Model -> Model
-setText text model =
+editorHeight : Model -> Int
+editorHeight { text } =
     let
         lineCount =
             String.countOccurrences "\n" text
-
-        editorHeight =
-            Basics.max 20 (lineCount + 2)
     in
-        { model
-            | text = text
-            , parseResult = Parser.parse text
-            , editorHeight = editorHeight
-        }
+        Basics.max 32 (lineCount + 2)
 
 
 init : ( Model, Cmd Msg )
 init =
-    ( blankModel |> setText (.body Examples.helpText), Cmd.none )
+    ( { text = .body Examples.helpText
+      , dialog = NoDialog
+      }
+    , Cmd.none
+    )
 
 
 
@@ -243,14 +225,14 @@ view model =
                     [ id "input"
                     , onInput UpdateText
                     , value model.text
-                    , rows model.editorHeight
+                    , rows (editorHeight model)
                     , autocomplete False
                     ]
                     []
                 ]
             , div [ id "output-column" ]
                 [ div [ id "output" ]
-                    [ viewParseResult model.parseResult ]
+                    [ viewParseResult (Parser.parse model.text) ]
                 ]
             ]
         , viewDialog model.dialog
@@ -265,7 +247,7 @@ update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
         UpdateText text ->
-            ( model |> setText text, Cmd.none )
+            ( { model | text = text }, Cmd.none )
 
         LoadExample num ->
             let
@@ -275,10 +257,10 @@ update msg model =
             in
                 case maybeExample of
                     Just example ->
-                        ( model |> setText example.body, Cmd.none )
+                        ( { model | text = example.body }, Cmd.none )
 
                     Nothing ->
-                        ( model |> setText "Unable to load example.", Cmd.none )
+                        ( { model | text = "Unable to load example." }, Cmd.none )
 
         OpenDialog dialog ->
             ( { model | dialog = dialog }, Cmd.none )
