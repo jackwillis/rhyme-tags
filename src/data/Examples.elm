@@ -356,9 +356,6 @@ For example, below is an excerpt from The Coup's "Fat Cats, Bigga Fish:"
 \t But let me state that I'm a hustler { for real: mobile }
 \t So you know I got the stolen { bus pass: rush past }
 
-You may load more examples from the drop-down menu on the left,
-or read the documentation in the link under the "help" header.
-
     """
 
 
