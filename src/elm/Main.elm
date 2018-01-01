@@ -138,7 +138,7 @@ aboutBody =
     div []
         [ p []
             [ text "rhyme-tags version "
-            , a [ href "https://github.com/jackwillis/rhyme-tags/releases/tag/v0.1.5" ]
+            , a [ href "https://github.com/jackwillis/rhyme-tags/releases/tag/v0.1.6" ]
                 [ text "0.1.6" ]
             , text "."
             ]
