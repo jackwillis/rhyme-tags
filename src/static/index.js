@@ -1,6 +1,8 @@
-require("../static/styles.css");
+// This file is the entry point for the whole application.
 
-var wrapper = document.getElementById("elm");
+// The entry point for all Less code.
+import "./styles.less";
+
+// The entry point for all Elm code.
 var app = require("../elm/Main").Main;
-
-app.embed(wrapper);
+app.embed(document.getElementById("elm"));

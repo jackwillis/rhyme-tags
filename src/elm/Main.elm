@@ -1,8 +1,9 @@
 module Main exposing (main)
 
 import Array
+import Dialog
 import Document exposing (Document)
-import Document.Example as Example exposing (Example)
+import Examples exposing (Example)
 import Document.Parser as Parser
 import Document.View as Document
 import Html exposing (..)
@@ -12,90 +13,188 @@ import Json.Decode as Json
 import String.Extra as String
 
 
+-- MODEL
+
+
 type alias Model =
-    { text : String
-    , parseResult : Result (List Parser.Error) Document
-    , inputRows : Int
-    , selectedExample : Maybe Int
+    { -- Value of the left column (editor)
+      text : String
+
+    -- Currently open dialog box, if any
+    , dialog : DialogState
     }
 
 
-blankModel : Model
-blankModel =
-    { text = ""
-    , parseResult = Ok (Document [])
-    , inputRows = 2
-    , selectedExample = Just 0
-    }
-
-
-setText : String -> Model -> Model
-setText text model =
+editorHeight : Model -> Int
+editorHeight { text } =
     let
         lineCount =
             String.countOccurrences "\n" text
-
-        numRows =
-            Basics.max 20 (lineCount + 2)
     in
-        { model
-            | text = text
-            , parseResult = text |> Parser.parse
-            , inputRows = numRows
-        }
-
-
-initText : String
-initText =
-    Example.helpText |> .body
+        Basics.max 32 (lineCount + 2)
 
 
 init : ( Model, Cmd Msg )
 init =
-    ( blankModel |> setText initText, Cmd.none )
+    ( { text = .body Examples.helpText
+      , dialog = NoDialog
+      }
+    , Cmd.none
+    )
+
+
+
+-- MESSAGES
 
 
 type Msg
     = UpdateText String
-    | SelectExample (Maybe Int)
-    | LoadExample
+    | LoadExample Int
+    | OpenDialog DialogState
+    | NoOp
 
 
-exampleSelector : (Maybe Int -> msg) -> Html msg
-exampleSelector tagger =
+
+-- DIALOG BOXES
+
+
+type DialogState
+    = NoDialog
+    | LoadDialog
+    | AboutDialog
+    | HelpDialog
+
+
+closeButton : Html Msg
+closeButton =
+    button
+        [ class "btn btn-info", onClick (OpenDialog NoDialog) ]
+        [ text "Close" ]
+
+
+defaultConfig : Dialog.Config Msg
+defaultConfig =
+    { closeMessage = Just (OpenDialog NoDialog)
+    , containerClass = Nothing
+    , header = Nothing
+    , body = Nothing
+    , footer = Just closeButton
+    }
+
+
+exampleSelector : Html Msg
+exampleSelector =
     let
         optionFor : Int -> Example -> Html a
         optionFor n example =
             option [ value (toString n) ] [ text example.title ]
 
-        options : List (Html a)
-        options =
-            Example.all
+        exampleOptions : List (Html a)
+        exampleOptions =
+            Examples.all
                 |> Array.indexedMap optionFor
                 |> Array.toList
 
-        decoder : Json.Decoder msg
+        decoder : Json.Decoder Msg
         decoder =
             Html.Events.targetValue
                 |> Json.map String.toInt
-                |> Json.map Result.toMaybe
-                |> Json.map tagger
+                |> Json.map
+                    (\res ->
+                        case res of
+                            Err err ->
+                                NoOp
+
+                            Ok num ->
+                                LoadExample num
+                    )
+
+        -- This is a hack until I get it working with a Bootstrap dropdown, or something
+        placeholderOption : Html a
+        placeholderOption =
+            option
+                [ value ""
+                , selected True
+                , disabled True
+                , hidden True
+                ]
+                [ text "Select an example" ]
     in
-        select [ on "change" decoder ] options
+        select [ on "change" decoder ] (placeholderOption :: exampleOptions)
 
 
-displayParseResult : Result (List Parser.Error) Document -> Html a
-displayParseResult result =
+helpBody : Html a
+helpBody =
+    p []
+        [ text "Usage information and source code is available on the "
+        , a [ href "https://github.com/jackwillis/rhyme-tags" ]
+            [ text "project website" ]
+        , text "."
+        ]
+
+
+aboutBody : Html a
+aboutBody =
+    div []
+        [ p []
+            [ text "rhyme-tags version "
+            , a [ href "https://github.com/jackwillis/rhyme-tags/releases/tag/v0.1.5" ]
+                [ text "0.1.5" ]
+            , text "."
+            ]
+        , p []
+            [ text "This is free software: you can redistribute it and/or modify it under the terms of the "
+            , a [ href "https://www.gnu.org/licenses/gpl-3.0.html" ] [ text "GNU General Public License" ]
+            , text " as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version."
+            ]
+        ]
+
+
+viewDialog : DialogState -> Html Msg
+viewDialog dialog =
+    Dialog.view <|
+        case dialog of
+            LoadDialog ->
+                Just
+                    { defaultConfig
+                        | header = Just <| h3 [] [ text "Load examples" ]
+                        , body = Just exampleSelector
+                    }
+
+            HelpDialog ->
+                Just
+                    { defaultConfig
+                        | header = Just <| h3 [] [ text "Help" ]
+                        , body = Just helpBody
+                    }
+
+            AboutDialog ->
+                Just
+                    { defaultConfig
+                        | header = Just <| h3 [] [ text "About rhyme-tags" ]
+                        , body = Just aboutBody
+                    }
+
+            NoDialog ->
+                Nothing
+
+
+
+-- VIEW HELPERS
+
+
+viewParseResult : Result (List Parser.Error) Document -> Html a
+viewParseResult result =
     case result of
         Err errors ->
-            displayErrors errors
+            viewErrors errors
 
         Ok document ->
             Document.view document
 
 
-displayErrors : List Parser.Error -> Html a
-displayErrors errors =
+viewErrors : List Parser.Error -> Html a
+viewErrors errors =
     let
         displayError : Parser.Error -> Html a
         displayError error =
@@ -107,73 +206,67 @@ displayErrors errors =
             ]
 
 
+
+-- VIEW
+
+
 view : Model -> Html Msg
 view model =
     div [ id "wrapper" ]
         [ header []
-            [ h1 []
-                [ text "rhyme-tags" ]
+            [ h1 [] [ text "rhyme-tags" ]
+            , button [ class "btn", onClick (OpenDialog LoadDialog) ] [ text "load" ]
+            , button [ class "btn", onClick (OpenDialog HelpDialog) ] [ text "help" ]
+            , button [ class "btn", onClick (OpenDialog AboutDialog) ] [ text "about" ]
             ]
         , div [ id "columns" ]
-            [ div [ id "control-column" ]
-                [ h2 [] [ text "examples" ]
-                , exampleSelector SelectExample
-                , button [ onClick LoadExample ] [ text "Load" ]
-                , h2 [] [ text "help" ]
-                , p []
-                    [ text "usage information and source code is available on the "
-                    , a [ href "https://github.com/jackwillis/rhyme-tags" ] [ text "project website" ]
-                    , text "."
+            [ div [ id "input-column" ]
+                [ textarea
+                    [ id "input"
+                    , onInput UpdateText
+                    , value model.text
+                    , rows (editorHeight model)
+                    , autocomplete False
                     ]
-                , h2 [] [ text "about" ]
-                , p []
-                    [ text "rhyme-tags is free software released under the GNU "
-                    , a [ href "https://www.gnu.org/licenses/gpl-3.0.en.html" ] [ text "General Public License" ]
-                    , text ", version 3."
-                    ]
+                    []
                 ]
-            , div [ id "data-columns" ]
-                [ div [ id "input-column" ]
-                    [ textarea
-                        [ id "input"
-                        , onInput UpdateText
-                        , value model.text
-                        , rows model.inputRows
-                        , autocomplete False
-                        ]
-                        []
-                    ]
-                , div [ id "output-column" ]
-                    [ div [ id "output" ]
-                        [ displayParseResult model.parseResult ]
-                    ]
+            , div [ id "output-column" ]
+                [ div [ id "output" ]
+                    [ viewParseResult (Parser.parse model.text) ]
                 ]
             ]
+        , viewDialog model.dialog
         ]
+
+
+
+-- UPDATE
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
         UpdateText text ->
-            ( model |> setText text, Cmd.none )
+            ( { model | text = text }, Cmd.none )
 
-        SelectExample num ->
-            ( { model | selectedExample = num }, Cmd.none )
-
-        LoadExample ->
+        LoadExample num ->
             let
                 maybeExample : Maybe Example
                 maybeExample =
-                    model.selectedExample
-                        |> Maybe.andThen (\num -> Example.all |> Array.get num)
+                    Array.get num Examples.all
             in
                 case maybeExample of
                     Just example ->
-                        ( model |> setText example.body, Cmd.none )
+                        ( { model | text = example.body }, Cmd.none )
 
                     Nothing ->
-                        ( model |> setText "Unable to load example.", Cmd.none )
+                        ( { model | text = "Unable to load example." }, Cmd.none )
+
+        OpenDialog dialog ->
+            ( { model | dialog = dialog }, Cmd.none )
+
+        NoOp ->
+            ( model, Cmd.none )
 
 
 main : Program Never Model Msg
