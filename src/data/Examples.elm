@@ -25,12 +25,12 @@ thingsYouCanDo =
     <|
         String.trim """
 
+---
 "Things You Can Do" (Excerpt) by Deltron 3030
 
 Origin: Oakland, CA, 2000
 Movement: Hip hop/alternative hip hop
-
--*-*-*-*-
+---
 
 Yo, Deltron { thunderforce: }, ain't no { other source: thunderforce }
 Of { sunlight: }, two { ton mic: sunlight }, leave you { tongue-tied: sunlight }
@@ -76,12 +76,12 @@ harlemSweeties =
     <|
         String.trim """
 
+---
 "Harlem Sweeties" by Langston Hughes
 
 Origin: New York, NY, 1921
 Movement: Jazz poetry
-
--*-*-*-*-
+---
 
 Have you dug the { spill: }
 Of Sugar { Hill: spill }?
@@ -138,12 +138,12 @@ realityPoem =
     <|
         String.trim """
 
+---
 "Reality Poem" by Linton Kwesi Johnson
 
 Origin: London, England, 1979
 Movement: Dub poetry
-
--*-*-*-*-
+---
 
 Dis is di age af { reality: }
 But some a wi a deal wid { mitalagy: }
@@ -204,12 +204,12 @@ aLongWalk =
     <|
         String.trim """
 
+---
 "A Long Walk" by Jill Scott
 
 Origin: Philadelphia, PA, 2000
 Movement: Neo-soul
-
--*-*-*-*-
+---
 
 [Verse 1]
 You're here, I'm { pleased: ee }, I really dig your compa{ ny: ee }
@@ -294,12 +294,12 @@ freightTrain =
     <|
         String.trim """
 
+---
 "Freight Train" by Elizabeth Cotten
 
 Origin: Chapel Hill, NC, 1956
 Movement: Country blues
-
--*-*-*-*-
+---
 
 Freight train, freight train, run so { fast: }
 Freight train, freight train, run so { fast: }
