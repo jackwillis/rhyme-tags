@@ -125,8 +125,8 @@ view document =
             in
                 "'" ++ text ++ "' is in group " ++ (group |> toString) ++ " (rhymes with '" ++ tag ++ ".')"
 
-        displayNode : Node -> Html a
-        displayNode node =
+        viewNode : Node -> Html a
+        viewNode node =
             case node of
                 Text { text } ->
                     Html.text text
@@ -141,6 +141,6 @@ view document =
 
         styledNodes : List (Html a)
         styledNodes =
-            document.nodes |> List.map (lazy displayNode)
+            document.nodes |> List.map (lazy viewNode)
     in
         div [] styledNodes

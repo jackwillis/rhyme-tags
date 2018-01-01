@@ -1,10 +1,21 @@
-module Document.Example exposing (..)
+module Examples
+    exposing
+        ( Example
+        , thingsYouCanDo
+        , harlemSweeties
+        , realityPoem
+        , freightTrain
+        , helpText
+        , all
+        )
 
 import Array exposing (Array)
 
 
 type alias Example =
-    { title : String, body : String }
+    { title : String
+    , body : String
+    }
 
 
 thingsYouCanDo : Example
@@ -14,10 +25,12 @@ thingsYouCanDo =
     <|
         String.trim """
 
-Title: Things You Can Do (Excerpt)
-Author: Deltron 3030
-Year: 2000
-Origin: Oakland, CA
+---
+"Things You Can Do" (Excerpt) by Deltron 3030
+
+Origin: Oakland, CA, 2000
+Movement: Hip hop/alternative hip hop
+---
 
 Yo, Deltron { thunderforce: }, ain't no { other source: thunderforce }
 Of { sunlight: }, two { ton mic: sunlight }, leave you { tongue-tied: sunlight }
@@ -63,10 +76,12 @@ harlemSweeties =
     <|
         String.trim """
 
-Title: Harlem Sweeties
-Author: Langston Hughes
-Year: 1921
-Origin: New York, NY
+---
+"Harlem Sweeties" by Langston Hughes
+
+Origin: New York, NY, 1921
+Movement: Jazz poetry
+---
 
 Have you dug the { spill: }
 Of Sugar { Hill: spill }?
@@ -123,10 +138,12 @@ realityPoem =
     <|
         String.trim """
 
-Title: Reality Poem
-Author: Linton Kwesi Johnson
-Year: 1979
-Origin: London, England
+---
+"Reality Poem" by Linton Kwesi Johnson
+
+Origin: London, England, 1979
+Movement: Dub poetry
+---
 
 Dis is di age af { reality: }
 But some a wi a deal wid { mitalagy: }
@@ -187,10 +204,12 @@ aLongWalk =
     <|
         String.trim """
 
-Title: A Long Walk
-Author: Jill Scott
-Year: 2000
-Origin: Philadelphia, PA
+---
+"A Long Walk" by Jill Scott
+
+Origin: Philadelphia, PA, 2000
+Movement: Neo-soul
+---
 
 [Verse 1]
 You're here, I'm { pleased: ee }, I really dig your compa{ ny: ee }
@@ -258,10 +277,10 @@ Or maybe we could just be silent
 Come on, come on
 
 [Refrain]
-Let's take a long walk around the { park: } after { dark: park }
-Find a spot for us to { spark: park }
-{ Conversation: -ation }, verbal { elation: -ation }, { stimulation: -ation }
-Share our { situations: -ation }, { temptations: -ation }, { education: -ation }, { relaxation: -ation }
+Let's take a { long: } { walk: park } around the { park: } after { dark: park }
+Find a { spot: long } for us to { spark: park }
+Conver{ sation: -ation }, verbal e{ lation: -ation }, stimu{ lation: -ation }
+Share our situ{ ations: -ation }, temp{ tations: -ation }, edu{ cation: -ation }, relax{ ation: -ation }
 Ele{ vation: -ation }, { maybe: } { baby: maybe }, maybe we can { save: maybe } the { nation: -ation }
 Come on, come on
 
@@ -275,10 +294,12 @@ freightTrain =
     <|
         String.trim """
 
-Title: Freight Train
-Artist: Elizabeth Cotten
-Year: 1956
-Origin: Chapel Hill, NC
+---
+"Freight Train" by Elizabeth Cotten
+
+Origin: Chapel Hill, NC, 1956
+Movement: Country blues
+---
 
 Freight train, freight train, run so { fast: }
 Freight train, freight train, run so { fast: }
@@ -315,15 +336,14 @@ helpText =
     <|
         String.trim """
 
-Hello. Welcome to rhyme-tags.
-
+Hello. Welcome to the rhyme-tags example document.
 rhyme-tags is a tool for visualizing the structure of rhyming poetry.
 
 You may edit the source of this document, on the left side.
 Any changes to the source will update the view, on the right side.
 
-Rhyme annotations in the document's source
-are used to color-code matching rhymes in the view.
+The rhyme data in the document's source, denoted by braces and colons,
+are used in the view to color-code matching rhymes.
 
 For example, below is an excerpt from The Coup's "Fat Cats, Bigga Fish:"
 
@@ -344,4 +364,4 @@ or read the documentation in the link under the "help" header.
 
 all : Array Example
 all =
-    Array.fromList [ aLongWalk, freightTrain, harlemSweeties, realityPoem, thingsYouCanDo, helpText ]
+    Array.fromList [ helpText, aLongWalk, freightTrain, harlemSweeties, realityPoem, thingsYouCanDo ]

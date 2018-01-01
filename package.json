@@ -1,18 +1,21 @@
 {
   "name": "rhyme-tags",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "description": "web-based rhyme visualization tool",
   "repository": "https://github.com/jackwillis/rhyme-tags",
   "dependencies": {
+    "bootstrap": "^3.3.7",
+    "css-loader": "^0.28.7",
     "elm": "^0.18.0",
     "elm-webpack-loader": "^4.4.0",
-    "html-webpack-plugin": "^2.30.1",
-    "webpack": "^3.10.0",
-    "webpack-merge": "^4.1.1",
-    "style-loader": "^0.19.1",
-    "css-loader": "^0.28.7",
     "extract-text-webpack-plugin": "^3.0.2",
-    "html-webpack-inline-source-plugin": "0.0.9"
+    "html-webpack-inline-source-plugin": "0.0.9",
+    "html-webpack-plugin": "^2.30.1",
+    "less": "^2.7.3",
+    "less-loader": "^4.0.5",
+    "style-loader": "^0.19.1",
+    "webpack": "^3.10.0",
+    "webpack-merge": "^4.1.1"
   },
   "devDependencies": {
     "webpack-dev-server": "^2.9.7"
